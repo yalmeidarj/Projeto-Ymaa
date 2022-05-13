@@ -73,7 +73,7 @@ def despesas():
     db.session.add(Expenses(expense_id=None, amount=amount, category=category, description=description, tdate=date, type=type_of_payment, is_paid=is_paid))
     db.session.commit()
     #my_client = db.session.query(Clients).all()
-    db.session.close()
+    #db.session.close()
 
     return redirect(url_for('financeiro'))
   else:
@@ -84,9 +84,17 @@ def despesas():
 
 @app.route('/financeiro')
 def financeiro():
-  expense_value = sum([i[0] for i in db.session.query(Expenses.amount).all()])
-  pay_received = round(sum([i[0] for i in db.session.query(Clients.Price).all()]), 3)
+  expense_value = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
+  pay_received = round(sum([i[0] for i in db.session.query(Clients.Price).all()]), 2)
+  print(expense_value, pay_received)
   return render_template('cards.html', **locals())
+
+
+@app.route('/documentos')
+def documentos():
+  # username = request.form.get('exampleInputEmail')
+  # print(username)
+  return render_template('documentos.html', **locals())
 
 
 @app.route('/registrar')
@@ -108,16 +116,15 @@ def services():
     print('working')
     service = request.form["Service"]
     price = float(request.form["price"])
-    client_id = int(request.form["clientID"])
     name = request.form["name"]
     lastName = request.form["lastName"]
     address = request.form["address"]
-    db.session.add(Clients(Service_id=None, Service=service, Price=price, Client_id=client_id, Name=name, LastName=lastName, Address=address))
+    db.session.add(Clients(Service_id=None, Service=service, Price=price, Client_id=None, Name=name, LastName=lastName, Address=address))
     db.session.commit()
     my_client = db.session.query(Clients).all()
-    db.session.close()
+    #db.session.close()
 
-    return redirect(url_for('othertable'))    
+    return redirect(url_for('services'))    
     
     
   return render_template('othertable.html', **locals())

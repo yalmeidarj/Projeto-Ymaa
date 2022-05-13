@@ -1,0 +1,85 @@
+{% extends 'layout.html' %} {% block body %}
+                        <div class="mb-4"></div>
+                            <div class="col mr-2">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    <span class="icon text-white-50">
+                                        
+                                    </span>
+                                    <span class="text">Enviar recibo</span>
+                                </a>
+                            </div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form class="" action="/servicos" method="POST">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="ServiceID" placeholder="Serviço ID">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="price" placeholder="Valor recebido">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="clientID" placeholder="Cliente ID">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" placeholder="Nome">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="lastName" placeholder="Sobrenome">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="address" placeholder="Endereço">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                        
+                        <!-- <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+                            </div>                         
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="myAreaChart"></canvas>
+                                </div>
+                                <hr>
+                                Styling for the area chart can be found in the
+                                <code>/js/demo/chart-area-demo.js</code> file.
+                            </div>
+                        </div> -->
+            </div>
+{% endblock %}
