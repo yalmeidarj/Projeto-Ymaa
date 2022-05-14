@@ -20,7 +20,90 @@ $(document).ready(function() {
 
 
 	</script>
-  <button type="button" method="POST" class="btn btn primary" data-toggle="modal" data-target=".bd-example-modal-lg">Adcionar Serviço</button>
+  <button type="button" method="POST" class="btn btn primary" data-toggle="modal" data-target=".bd-example-modal-lg">Novo Cliente</button>
+  <br>
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="container">
+        <form class="" action="/clientes" method="POST">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+
+                                <input type="text" class="form-control" name="cliente_id"  placeholder="Cliente ID">
+                            </div>
+                        </div>
+                    </div>            
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="service" placeholder="Descrição do Serviço">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="price" placeholder="Valor">
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="address" placeholder="Endereço">
+                            </div>
+                        </div>
+                    </div> 
+
+          <label for="payment_confirmed">Requer N.F? </label>
+          <select id="country" name="country">
+            <option value="True">Sim</option>
+            <option value="False">Não</option>
+          </select>
+          <br>
+          <br>
+
+          <button type="submit" method="POST" class="btn btn-success btn-circle">✓</button>
+
+        </form>
+      </div>
+    </div>
+
+  </div>       
+  </div>
+  <body>
+  <div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Clientes</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+    
+            <table id="data" class="table table-striped table-bordered table-hover dt-responsive" width="100%" >
+                <thead>
+                    <tr>
+                        <th>Cliente ID</th>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Endereço</th>
+                        <th>Adcionar Serviço</th>                                              
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for clientes in clientes %}
+                    <tr>
+                        <td>{{clientes.Cliente_id}}</td>
+                        <td>{{clientes.Name}} {{clientes.LastName}}</td>
+                        <td>{{clientes.Telefone}}</td>
+                        <td>{{clientes.Email}}</td>
+                        <td>{{clientes.Address}}</td>
+                        <td>                        
+  <button type="button" method="POST" class="bg-gradient-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Adcionar Serviço</button>
   <br>
   <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -81,55 +164,12 @@ $(document).ready(function() {
           <br>
           <br>
 
-          <button type="submit" method="POST" name="button">Adcionar</button>
+          <button type="submit" value={{clientes.Cliente_id}} method="POST" name="button">Adcionar</button>
 
         </form>
       </div>
     </div>
 
-  </div>       
-  </div>
-  <body>
-  <div class="card shadow mb-4">
-  <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary">Serviços</h6>
-  </div>
-  <div class="card-body">
-    <div class="table-responsive">
-    
-            <table id="data" class="table table-striped table-bordered table-hover dt-responsive" width="100%" >
-                <thead>
-                    <tr>
-                        <th>Serviço ID</th>
-                        <th>Descrição serviço</th>
-                        <th>Valor</th>
-                        <!-- <th>Cliente ID</th> -->
-                        <th>Nome</th>
-                        <th>Sobrenome</th>
-                        <th>Endereço</th>
-                        <th>Adcionar Serviço</th>                                              
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for my_client in my_client %}
-                    <tr>
-                        <td>{{my_client.Service_id}}</td>
-                        <td>{{my_client.Service}}</td>
-                        <td>{{my_client.Price}}</td>
-                        <!-- <td>{{my_client.Client_id}}</td> -->
-                        <td>{{my_client.Name}}</td>
-                        <td>{{my_client.LastName}}</td>
-                        <td>{{my_client.Address}}</td>
-                        <td>                        <div class="mb-4"></div>
-                            <div class="col mr-2">
-                                <a href="#" class="btn btn-primary btn-sm">
-                                    <span class="icon text-white-50">
-                                        
-                                    </span>
-                                    <span class="text">Adcionar</span>
-                                </a>
-                            </div></td>
                     </tr>
                     {% endfor %}
                     

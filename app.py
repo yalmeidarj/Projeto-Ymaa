@@ -25,7 +25,7 @@ db = SQLAlchemy(app)
 
 app.register_error_handler(404, page_not_found)
 
-class Clients(db.Model):
+class Services(db.Model):
 
     Service_id = db.Column(db.Integer, primary_key=True)
     Service = db.Column(db.String(400), unique=False, nullable=False)
@@ -38,8 +38,20 @@ class Clients(db.Model):
     def __repr__(self):
         return '<User %r>' % self.Service_id
 
-class Expenses(db.Model):
+class Clientes(db.Model):
 
+    Cliente_id = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(400), unique=False, nullable=False)   
+    LastName = db.Column(db.String(60), unique=False, nullable=False)
+    Telefone = db.Column(db.String(60), unique=False, nullable=False)
+    Email = db.Column(db.String(60), unique=False, nullable=False)
+    Address = db.Column(db.String(400), unique=False, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.Cliente_id
+
+class Expenses(db.Model):
+  
     expense_id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float, unique=False, nullable=False)
     category = db.Column(db.String(50), unique=False, nullable=False)
@@ -84,9 +96,17 @@ def despesas():
 
 @app.route('/financeiro')
 def financeiro():
-  expense_value = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
-  pay_received = round(sum([i[0] for i in db.session.query(Clients.Price).all()]), 2)
-  print(expense_value, pay_received)
+   
+  expense = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
+  pay = round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2)
+  expense_value = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2))
+  pay_received = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2))
+  balance = "${:,.2f}".format(round(pay - expense, 2))
+  service_id = Clientes.Cliente_id
+  # def getme():
+  #   db.session.query(Clientes.Cliente_id where expense)
+
+
   return render_template('cards.html', **locals())
 
 
@@ -104,12 +124,12 @@ def register():
   return render_template('register.html', **locals())
 
 @app.route('/servicos', methods = ['GET','POST'])
-def services():
+def servicos():
   
 
-  my_client = db.session.query(Clients).all()
+  all_services = db.session.query(Services).all()
 
-  print(db.session.query(Clients).all())
+  print(db.session.query(Services).all())
 
   
   if request.method == 'POST':
@@ -119,17 +139,40 @@ def services():
     name = request.form["name"]
     lastName = request.form["lastName"]
     address = request.form["address"]
-    db.session.add(Clients(Service_id=None, Service=service, Price=price, Client_id=None, Name=name, LastName=lastName, Address=address))
+    db.session.add(Services(Service_id=None, Service=service, Price=price, Client_id=None, Name=name, LastName=lastName, Address=address))
     db.session.commit()
-    my_client = db.session.query(Clients).all()
+    all_services = db.session.query(Services).all()
     #db.session.close()
 
-    return redirect(url_for('services'))    
+    return redirect(url_for('servicos'))    
     
     
-  return render_template('othertable.html', **locals())
+  return render_template('servicos.html', **locals())
 
+@app.route('/clientes', methods = ['GET','POST'])
+def clientes():
+  
+  clientes = db.session.query(Clientes).all()
+  
+  if request.method == 'POST':
+    cliente_id = request.form["cliente_id"]
+    name = request.form["name"]
+    lastName = request.form["lastName"]
+    telefone = request.form["telefone"]
+    email = request.form["email"]
+    address = request.form["address"]
+    if cliente_id == '':
+      cliente_id = None
 
+    db.session.add(Clientes(Cliente_id=cliente_id, Name=name, LastName=lastName, Telefone=telefone, Email=email, Address=address))
+    db.session.commit()
+    clientes = db.session.query(Clientes).all()
+    #db.session.close()
+
+    return redirect(url_for('clientes'))    
+    
+    
+  return render_template('clientes.html', **locals())
 
 
 if __name__ == '__main__':

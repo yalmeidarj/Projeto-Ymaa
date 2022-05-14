@@ -1,0 +1,146 @@
+{% extends 'layout.html' %} {% block body %}
+	<link rel="shortcut icon" type="image/png" href="/media/images/favicon.png">
+	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.datatables.net/rss.xml">
+	<link rel="stylesheet" type="text/css" href="/media/css/site-examples.css?_=94461d89946ef749b7a43d14685c725d1">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+	<style type="text/css" class="init">
+
+	</style>
+	<script type="text/javascript" src="/media/js/site.js?_=64232ba754b2748258f2324e5f9e21f9"></script>
+	<script type="text/javascript" src="/media/js/dynamic.php?comments-page=examples%2Fbasic_init%2Fzero_configuration.html" async></script>
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
+	<script type="text/javascript" class="init">
+
+
+$(document).ready(function() {
+	$('table').DataTable();
+} );
+
+
+	</script>
+  <button type="button" method="POST" class="bg-gradient-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Adcionar Serviço</button>
+  <br>
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="container">
+        <form class="" action="/servicos" method="POST">
+            <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="Client_id" placeholder="Cliente ID (DEIXAR EM BRANCO PARA NOVOS CLIENTES!)">
+                            </div>
+                        </div>
+                    </div>            
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="price" placeholder="Valor recebido">
+                            </div>
+                        </div>
+                    </div>
+                    
+
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" placeholder="Nome">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="lastName" placeholder="Sobrenome">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="address" placeholder="Endereço">
+                            </div>
+                        </div>
+                    </div> 
+
+          <label for="payment_confirmed">Pagamento recebido?</label>
+          <select id="country" name="country">
+            <option value="True">Sim</option>
+            <option value="False">Não</option>
+          </select>
+          <br>
+          <br>
+
+          <button type="submit" method="POST" name="button">Adcionar</button>
+
+        </form>
+      </div>
+    </div>
+
+  </div>       
+  </div>
+  <body>
+  <div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Serviços</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+    
+            <table id="data" class="table table-striped table-bordered table-hover dt-responsive" width="100%" >
+                <thead>
+                    <tr>
+                        <th>Serviço ID</th>
+                        <th>Descrição serviço</th>
+                        <th>Valor</th>
+                        <!-- <th>Cliente ID</th> -->
+                        <th>Cliente ID</th>
+                        <th>Nome</th>
+                        <th>Endereço</th>
+                        <th>PGTO Concluído?</th>                                              
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for all_services in all_services %}
+                    <tr>
+                        <td>{{all_services.Service_id}}</td>
+                        <td>{{all_services.Service}}</td>
+                        <td>{{all_services.Price}}</td>
+                        <td>{{all_services.Client_id}}</td>
+                        <td>{{all_services.Name}} {{all_services.LastName}}</td>
+                        <td>{{all_services.Address}}</td>
+                        <td>                        <div class="mb-4"></div>
+                            <div class="col mr-2">
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    <span class="icon text-white-50">
+                                        
+                                    </span>
+                                    <span class="text">Confirmar</span>
+                                </a>
+                            </div></td>
+                    </tr>
+                    {% endfor %}
+                    
+
+                </tbody>
+            </table>
+    </div>
+
+    
+    {% block scripts %}{% endblock %}
+    {% endblock %}
+  </body>
+</html>
