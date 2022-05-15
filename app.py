@@ -1,12 +1,15 @@
 #from crypt import methods
+import email
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import func
-#import requests
+from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import sqlite3
+from flask_login import login_user, login_required, logout_user, current_user
 
-
+#some_engine = create_engine('sqlite:///Ymaa.db')
 
 def page_not_found(e):
   return render_template('404.html'), 404
@@ -25,6 +28,17 @@ db = SQLAlchemy(app)
 
 app.register_error_handler(404, page_not_found)
 
+
+class User(db.Model):
+  
+    user_id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(12), unique=False, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.user_id
+
+
 class Services(db.Model):
 
     Service_id = db.Column(db.Integer, primary_key=True)
@@ -34,6 +48,7 @@ class Services(db.Model):
     Name = db.Column(db.String(50), unique=False, nullable=False)
     LastName = db.Column(db.String(60), unique=False, nullable=False)
     Address = db.Column(db.String(400), unique=False, nullable=False)
+    is_finished = db.Column(db.Boolean, unique=False, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.Service_id
@@ -62,14 +77,21 @@ class Expenses(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.expense_id
+#Session = sessionmaker(bind=some_engine)
 
-@app.route('/')
-def index():
-  return render_template('index.html', **locals())
+@app.route('/home')
+def home():
+  return render_template('home.html', **locals())
 
-
-@app.route('/login')
+@app.route('/', methods = ['GET','POST'])
 def login():
+  if request.method =='POST':
+    userName = request.form.get("email")
+    password = request.form.get("password")
+    user = db.session.Users.query.filter_by(email=email).first()
+    if user:
+      if check_password_hash(user.Password, password):
+        return redirect(url_for('home'))
   return render_template('login.html', **locals())
 
 @app.route('/despesas', methods = ['GET','POST'])
@@ -139,7 +161,7 @@ def servicos():
     name = request.form["name"]
     lastName = request.form["lastName"]
     address = request.form["address"]
-    db.session.add(Services(Service_id=None, Service=service, Price=price, Client_id=None, Name=name, LastName=lastName, Address=address))
+    db.session.add(Services(Service_id=None, Service=service, Price=price, Client_id=None, Name=name, LastName=lastName, Address=address, is_finished=0))
     db.session.commit()
     all_services = db.session.query(Services).all()
     #db.session.close()

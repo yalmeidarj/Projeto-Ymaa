@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 #import requests
 import config
 import sqlite3
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Ymaa.db"
@@ -26,8 +26,22 @@ class Client(db.Model):
         return '<User %r>' % self.Service_id
 
 
-print(db.session.query(Client).all())
+class Users(db.Model):
+  
+    UserID = db.Column(db.Integer, primary_key=True)
+    UserName = db.Column(db.String(50), unique=True, nullable=False)
+    Password = db.Column(db.String(12), unique=False, nullable=False)
 
+    def __repr__(self):
+        return '<User %r>' % self.user_id
+
+
+
+email = "yalmeida.rj@gmail.com"
+pwd = "!88081647ydA"
+
+db.session.add(Users(UserID=None, UserName=email, Password=generate_password_hash(pwd, method='sha256')))
+db.session.commit()
 
 
 
