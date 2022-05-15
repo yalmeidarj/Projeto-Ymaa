@@ -1,13 +1,13 @@
 #from crypt import methods
 import email
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, flash, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import sqlite3
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 #some_engine = create_engine('sqlite:///Ymaa.db')
 
@@ -26,18 +26,38 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-app.register_error_handler(404, page_not_found)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(UserID):
+    return Users.query.get(UserID)
+
+
+class Users(UserMixin, db.Model):
   
-    user_id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(12), unique=False, nullable=False)
+    UserID = db.Column(db.Integer, primary_key=True)
+    UserName = db.Column(db.String(50), unique=True, nullable=False)
+    Password = db.Column(db.String(12), unique=False, nullable=False)
+
+    def get_id(self):
+           return (self.UserID)
 
     def __repr__(self):
-        return '<User %r>' % self.user_id
+        return '<User %r>' % self.UserID
 
+class requests(db.Model):
+  
+    UserID = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(50), unique=True, nullable=False)
+    LastName = db.Column(db.String(50), unique=False, nullable=False)
+    UserName = db.Column(db.String(50), unique=True, nullable=False)
+    Password = db.Column(db.String(100), unique=False, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.UserID
 
 class Services(db.Model):
 
@@ -79,22 +99,71 @@ class Expenses(db.Model):
         return '<User %r>' % self.expense_id
 #Session = sessionmaker(bind=some_engine)
 
-@app.route('/home')
-def home():
-  return render_template('home.html', **locals())
+app.register_error_handler(404, page_not_found)
+
+
 
 @app.route('/', methods = ['GET','POST'])
 def login():
+  error = None
   if request.method =='POST':
     userName = request.form.get("email")
     password = request.form.get("password")
-    user = db.session.Users.query.filter_by(email=email).first()
+    user = db.session.query(Users).filter_by(UserName=userName).first()
     if user:
       if check_password_hash(user.Password, password):
+        login_user(user, remember=True)
         return redirect(url_for('home'))
+      else:
+        flash('Credenciais não autorizadas. Tente novamente ou entre em contato com o Administrador')
+        return redirect(url_for('login'))
+    else:
+      flash('Usuário não existente. Tente novamente ou entre em contato com o Administrador')
   return render_template('login.html', **locals())
 
+@app.route('/logout')
+@login_required
+def logout():
+  logout_user()
+  flash('Sessão encerrada com sucesso!')
+  return redirect(url_for('login'))
+
+@app.route('/registrar' , methods = ['GET','POST'])
+def registrar():  
+  if request.method =='POST':
+    error = None 
+    userName = request.form.get("email") 
+    userName = db.session.query(Users).filter_by(UserName=userName).first()
+    if userName:
+      print('usuario existente')
+      flash('Email já registrado. Use outro Email ou entre em sua conta.')
+      # Account already exists.
+
+    else:
+      name = request.form.get("name")
+      last_name = request.form.get("lastname")
+      userName = request.form.get("email")
+      password = request.form.get("password")
+      password_confirm = request.form.get("password_confirm")
+      if password == password_confirm:
+        # password confirmed
+        db.session.add(requests(UserID=None, Name=name, LastName=last_name, UserName=userName, Password=password))
+        db.session.commit()
+        flash('Pedido de registro de conta efetivado. Por favor, aguarde até que a Administração aprove seu registro antes de entrar em sua conta.')
+        return redirect(url_for('registrar'))
+      else:
+        flash('Senha divergente. Por favor, verique sua senha e repita a MESMA senha para o cadastro.')
+        return redirect(url_for('registrar'))
+
+  return render_template('register.html', **locals())
+
+@app.route('/home')
+@login_required
+def home():
+  return render_template('home.html', **locals())
+
 @app.route('/despesas', methods = ['GET','POST'])
+@login_required
 def despesas():
   if request.method == 'POST':
     print('working')
@@ -117,6 +186,7 @@ def despesas():
     return render_template('despesas.html', **locals())
 
 @app.route('/financeiro')
+@login_required
 def financeiro():
    
   expense = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
@@ -131,21 +201,15 @@ def financeiro():
 
   return render_template('cards.html', **locals())
 
-
 @app.route('/documentos')
+@login_required
 def documentos():
   # username = request.form.get('exampleInputEmail')
   # print(username)
   return render_template('documentos.html', **locals())
 
-
-@app.route('/registrar')
-def register():
-  # username = request.form.get('exampleInputEmail')
-  # print(username)
-  return render_template('register.html', **locals())
-
 @app.route('/servicos', methods = ['GET','POST'])
+@login_required
 def servicos():
   
 
@@ -172,6 +236,7 @@ def servicos():
   return render_template('servicos.html', **locals())
 
 @app.route('/clientes', methods = ['GET','POST'])
+@login_required
 def clientes():
   
   clientes = db.session.query(Clientes).all()
