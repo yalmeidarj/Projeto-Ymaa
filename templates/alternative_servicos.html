@@ -1,0 +1,106 @@
+{% extends 'layout.html' %} {% block body %}
+<style>
+form {
+  max-width: 900px;
+  display: block;
+  margin: 0 auto;
+}
+</style>
+<form class="p-3">
+
+  <div class="form-group">
+    <label for="seeAnotherField">Adcionar serviço para cliente existente ou novo cliente?</label>
+    <select class="form-control" id="seeAnotherField">
+          <option value="no">Adcionar serviço  com CLIENTE ID</option>
+          <option value="yes">Adcionar Serviço para NOVO CLIENTE</option>
+    </select>
+  </div>
+  <div class="form-group" id="firstDiv">
+    <label for="comments">ClienteID (número de identifição do cliente)</label>
+    <input type="text" class="form-control" id="name" placeholder="Cliente ID" ></input>
+  
+    <div class="form-group">
+        <label for="name">Descriçao do serviço</label>
+        <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
+    </div>
+    <div class="form-group">
+        <label for="name">Valor do serviço</label>
+        <input type="text" class="form-control" name="price" placeholder="R$">
+    </div>
+    <div class="form-group">
+      <label for="payment_confirmed">Pagamento recebido?</label>
+      <select id="country" name="country">
+        <option value="True">Sim</option>
+        <option value="False">Não</option>
+    </select>
+    </div>
+    <div class="form-group">
+      <label for="name">Data e horário do serviço: </label>
+
+      <input type="datetime-local" id="meeting-time" name="meeting-time" >    
+    </div> 
+    <div class="form-group">
+      <label for="comments">Comentários (INTERNO)</label>
+      <textarea class="form-control" id="comments" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Adcionar</button>
+  </div>
+  <div class="form-group" id="otherFieldDiv">
+    <div class="form-group">
+        <label for="name">Nome</label>
+        <input type="text" class="form-control" id="name" placeholder="Nome">
+    </div>
+    <div class="form-group">
+        <label for="name">Sobrenome</label>
+        <input type="text" class="form-control" id="name" placeholder="Sobrenome">
+    </div>
+    <div class="form-group">
+        <label for="name">Telefone</label>
+        <input type="text" class="form-control" id="name" placeholder="Telefone">
+    </div>
+    <div class="form-group">
+        <label for="name">Email</label>
+        <input type="text" class="form-control" id="name" placeholder="Email">
+    </div> 
+    <div class="form-group">
+        <label for="name">Endereço</label>
+        <input type="text" class="form-control" id="name" placeholder="Endereço">
+    </div>
+    <div class="form-group">
+        <label for="name">Descriçao do serviço</label>
+        <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
+    </div>
+    <div class="form-group">
+        <label for="name">Valor do serviço</label>
+        <input type="text" class="form-control" name="price" placeholder="R$">
+    </div>
+
+    
+    <div class="form-group">
+        <label for="payment_confirmed">Pagamento recebido?</label>
+        <select id="country" name="country">
+          <option value="True">Sim</option>
+          <option value="False">Não</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="name">Data e horário do serviço: </label>
+
+        <input type="datetime-local" id="meeting-time" name="meeting-time" >    
+    </div> 
+    <div class="form-group">
+      <label for="comments">Comentários (INTERNO)</label>
+      <textarea class="form-control" id="comments" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Adcionar</button>
+  </div>  
+
+
+
+
+
+    
+
+  </form>
+
+{% endblock %}

@@ -201,18 +201,23 @@ def financeiro():
 def documentos():
   return render_template('documentos.html', **locals())
 
+@app.route('/al', methods = ['GET','POST'])
+#@login_required
+def al():
+  return render_template('alternative_servicos.html', **locals())
+
 @app.route('/servicos', methods = ['GET','POST'])
 @login_required
 def servicos():
+  
   
 
   all_services = db.session.query(Services).all()
 
   print(db.session.query(Services).all())
-
-  
-  if request.method == 'POST':
-    print(request.form.get("client_type"))
+  select = request.form.get('comp_select')
+  print(select)
+  if request.method == 'POST':    
     if x:
       new_client = False      
       print('working')

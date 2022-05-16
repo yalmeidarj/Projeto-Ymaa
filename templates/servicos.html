@@ -22,139 +22,12 @@ $(document).ready(function() {
 
 
 	</script>
-  <script type="text/javascript" src="/media/js/site.js?_=64232ba754b2748258f2324e5f9e21f9"></script>
-
-  <select form_id='new'class="form-select" id="client_type" aria-label="Default select example">
-  <option value="0" selected>Adcionar serviço CLIENTE ID</option>
-  <option value="1">Adcionar Serviço para NOVO CLIENTE</option>
-  </select> 
+  <form method="POST" action="/al">
   <div class="text">
-  <button type="button" method="POST" onclick="myFunction()" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bd-example-modal-lg">Adcionar Serviço</button>
+      <a class="btn btn-primary btn-sm" href="/al">Adcionar Serviço</a>
+  </form>
   </div>
-   
   <br>
-  
-  {%if  x == 'Adcionar serviço CLIENTE ID' %}
-  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="container">
-        <form class="" action="/servicos" method="POST">
-            <br>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="Client_id" placeholder="Cliente ID (DEIXAR EM BRANCO PARA NOVOS CLIENTES!)">
-                            </div>
-                        </div>
-                    </div>            
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="price" placeholder="Valor recebido">
-                            </div>
-                        </div>
-                    </div>
-                    
-
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Nome">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="lastName" placeholder="Sobrenome">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="address" placeholder="Endereço">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <input type="datetime-local" id="meeting-time"
-                        name="meeting-time" >   
-                    <br>                   
-          <label for="payment_confirmed">Pagamento recebido?</label>
-          <select id="country" name="country">
-            <option value="True">Sim</option>
-            <option value="False">Não</option>
-          </select>
-          <br>
-
-          <button type="submit" method="POST" name="button">Adcionar</button>
-
-        </form>
-      </div>
-    </div>
-
-  </div>       
-  </div>
-  {% else %}
-  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="container">
-        <form class="" action="/servicos" method="POST">
-            <br>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="Client_id" placeholder="Cliente ID">
-                            </div>
-                        </div>
-                    </div>            
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="price" placeholder="Valor recebido">
-                            </div>
-                        </div>
-                    </div>
-                    <input type="datetime-local" id="meeting-time"
-                        name="meeting-time" >   
-                    <br>                   
-          <label for="payment_confirmed">Pagamento recebido?</label>
-          <select id="country" name="country">
-            <option value="True">Sim</option>
-            <option value="False">Não</option>
-          </select>
-          <br>
-
-          <button type="submit" method="POST" name="button">Adcionar</button>
-
-        </form>
-      </div>
-    </div>
-
-  </div>       
-  </div>
-
-
-  {%endif%}
   <body>
   <div class="card shadow mb-4">
   <div class="card-header py-3">
@@ -203,12 +76,12 @@ $(document).ready(function() {
             </table>
     </div>
 
-    <script>
+    <!-- <script>
     function myFunction() {
         var x = document.getElementById("client_type").value;
         document.getElementById("demo").innerHTML = x;
     }
-    </script>
+    </script> -->
     {% block scripts %}{% endblock %}
     {% endblock %}
   </body>
