@@ -1,0 +1,33 @@
+{% extends 'layout.html' %} {% block body %}   
+    <link rel="stylesheet" href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>
+    <script src='fullcalendar/main.js'></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          locale: 'pt-Br'
+        });
+        calendar.render();
+      });
+
+    </script>
+  </head>
+  <body>
+    <!-- The form -->
+  <form class="example" action="action_page.php">
+    <input type="text" placeholder="Search.." name="search">
+  </form>
+
+  <form action="/action_page.php">
+    <label for="appt">Escolha o horário:</label>
+    <input type="time" id="appt" name="appt">
+    <input type="submit">
+   </form>
+    <div id='calendar'></div>
+{% endblock %}
+
+ 'todo':
+date: '2022-15-05'

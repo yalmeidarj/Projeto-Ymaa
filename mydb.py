@@ -37,8 +37,7 @@ class Users(db.Model):
 
 
 
-email = "yalmeida.rj@gmail.com"
-pwd = "!88081647ydA"
+
 
 db.session.add(Users(UserID=None, UserName=email, Password=generate_password_hash(pwd, method='sha256')))
 db.session.commit()

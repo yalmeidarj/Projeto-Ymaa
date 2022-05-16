@@ -1,5 +1,5 @@
-#from crypt import methods
 import email
+from select import select
 from flask import Flask, flash, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
@@ -9,32 +9,23 @@ import config
 import sqlite3
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
-#some_engine = create_engine('sqlite:///Ymaa.db')
-
 def page_not_found(e):
   return render_template('404.html'), 404
 
-
 app = Flask(__name__)
 app.config.from_object(config.config['development'])
-
-
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Ymaa.db"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-
-
 login_manager = LoginManager()
 login_manager.init_app(app)
-
 
 @login_manager.user_loader
 def load_user(UserID):
     return Users.query.get(UserID)
-
 
 class Users(UserMixin, db.Model):
   
@@ -101,8 +92,6 @@ class Expenses(db.Model):
 
 app.register_error_handler(404, page_not_found)
 
-
-
 @app.route('/', methods = ['GET','POST'])
 def login():
   error = None
@@ -147,7 +136,8 @@ def registrar():
       password_confirm = request.form.get("password_confirm")
       if password == password_confirm:
         # password confirmed
-        db.session.add(requests(UserID=None, Name=name, LastName=last_name, UserName=userName, Password=password))
+        password_hash = generate_password_hash(password, method='sha256')
+        db.session.add(requests(UserID=None, Name=name, LastName=last_name, UserName=userName, Password=password_hash))
         db.session.commit()
         flash('Pedido de registro de conta efetivado. Por favor, aguarde até que a Administração aprove seu registro antes de entrar em sua conta.')
         return redirect(url_for('registrar'))
@@ -161,6 +151,11 @@ def registrar():
 @login_required
 def home():
   return render_template('home.html', **locals())
+
+@app.route('/calendar')
+@login_required
+def calendar():
+  return render_template('calendar.html', **locals())
 
 @app.route('/despesas', methods = ['GET','POST'])
 @login_required
@@ -204,8 +199,6 @@ def financeiro():
 @app.route('/documentos')
 @login_required
 def documentos():
-  # username = request.form.get('exampleInputEmail')
-  # print(username)
   return render_template('documentos.html', **locals())
 
 @app.route('/servicos', methods = ['GET','POST'])
@@ -219,18 +212,27 @@ def servicos():
 
   
   if request.method == 'POST':
-    print('working')
-    service = request.form["Service"]
-    price = float(request.form["price"])
-    name = request.form["name"]
-    lastName = request.form["lastName"]
-    address = request.form["address"]
-    db.session.add(Services(Service_id=None, Service=service, Price=price, Client_id=None, Name=name, LastName=lastName, Address=address, is_finished=0))
-    db.session.commit()
-    all_services = db.session.query(Services).all()
-    #db.session.close()
+    print(request.form.get("client_type"))
+    if x:
+      new_client = False      
+      print('working')
+      service = request.form["Service"]
+      price = float(request.form["price"])
+      name = request.form["name"]
+      lastName = request.form["lastName"]
+      address = request.form["address"]
+      db.session.add(Services(Service_id=None, Service=service, Price=price, Client_id=None, Name=name, LastName=lastName, Address=address, is_finished=0))
+      db.session.commit()
+      all_services = db.session.query(Services).all()
 
-    return redirect(url_for('servicos'))    
+      return redirect(url_for('servicos'))  
+    else:
+      new_client = True
+      service = request.form["Service"]
+      price = float(request.form["price"])
+      
+      
+      return redirect(url_for('servicos'))  
     
     
   return render_template('servicos.html', **locals())
