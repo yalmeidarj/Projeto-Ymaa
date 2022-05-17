@@ -6,22 +6,22 @@ form {
   margin: 0 auto;
 }
 </style>
-<form class="p-3">
+<form class="p-3" method="POST">
 
   <div class="form-group">
-    <label for="seeAnotherField">Adcionar serviço para cliente existente ou novo cliente?</label>
-    <select class="form-control" id="seeAnotherField">
+    <label  for="seeAnotherField">Adcionar serviço para cliente existente ou novo cliente?</label>
+    <select  name='mval' class="form-control" id="seeAnotherField">
           <option value="no">Adcionar serviço  com CLIENTE ID</option>
           <option value="yes">Adcionar Serviço para NOVO CLIENTE</option>
     </select>
   </div>
   <div class="form-group" id="firstDiv">
     <label for="comments">ClienteID (número de identifição do cliente)</label>
-    <input type="text" class="form-control" id="name" placeholder="Cliente ID" ></input>
+    <input type="text" class="form-control" id="name" name="ClientID"placeholder="Cliente ID" ></input>
   
     <div class="form-group">
         <label for="name">Descriçao do serviço</label>
-        <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
+        <input type="text" class="form-control" name="service" placeholder="Descrição do serviço">
     </div>
     <div class="form-group">
         <label for="name">Valor do serviço</label>
@@ -29,9 +29,18 @@ form {
     </div>
     <div class="form-group">
       <label for="payment_confirmed">Pagamento recebido?</label>
-      <select id="country" name="country">
+      <select id="payment_confirmed" name="payment_confirmed">
         <option value="True">Sim</option>
         <option value="False">Não</option>
+    </select>
+    </div>
+    <div class="form-group">
+      <label for="payment_type">Forma de Pagamento: </label>
+      <select id="payment_type" name="payment_type">
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Cartão">Cartão</option>
+        <option value="PIX">PIX</option>
+        <option value="Boleto">Boleto</option>
     </select>
     </div>
     <div class="form-group">
@@ -41,56 +50,65 @@ form {
     </div> 
     <div class="form-group">
       <label for="comments">Comentários (INTERNO)</label>
-      <textarea class="form-control" id="comments" rows="3"></textarea>
+      <textarea class="form-control" name="comments" id="comments" rows="3"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Adcionar</button>
   </div>
   <div class="form-group" id="otherFieldDiv">
     <div class="form-group">
         <label for="name">Nome</label>
-        <input type="text" class="form-control" id="name" placeholder="Nome">
+        <input type="text" class="form-control" name="name"  placeholder="Nome">
     </div>
     <div class="form-group">
         <label for="name">Sobrenome</label>
-        <input type="text" class="form-control" id="name" placeholder="Sobrenome">
+        <input type="text" class="form-control" name="lastName"  placeholder="Sobrenome">
     </div>
     <div class="form-group">
         <label for="name">Telefone</label>
-        <input type="text" class="form-control" id="name" placeholder="Telefone">
+        <input type="text" class="form-control" name="phone"  placeholder="Telefone">
     </div>
     <div class="form-group">
         <label for="name">Email</label>
-        <input type="text" class="form-control" id="name" placeholder="Email">
+        <input type="email" class="form-control" name="email"  placeholder="Email">
     </div> 
     <div class="form-group">
         <label for="name">Endereço</label>
-        <input type="text" class="form-control" id="name" placeholder="Endereço">
+        <input type="text" class="form-control" name="address"  placeholder="Endereço">
     </div>
     <div class="form-group">
         <label for="name">Descriçao do serviço</label>
-        <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
+        <input type="text" class="form-control" name="service2" placeholder="Descrição do serviço">
     </div>
     <div class="form-group">
         <label for="name">Valor do serviço</label>
-        <input type="text" class="form-control" name="price" placeholder="R$">
+        <input type="text" class="form-control" name="price2" placeholder="R$">
     </div>
 
     
     <div class="form-group">
-        <label for="payment_confirmed">Pagamento recebido?</label>
-        <select id="country" name="country">
+        <label for="payment_confirmed2">Pagamento recebido?</label>
+        <select id="country" name="payment_confirmed2">
           <option value="True">Sim</option>
           <option value="False">Não</option>
         </select>
     </div>
     <div class="form-group">
-        <label for="name">Data e horário do serviço: </label>
+      <label for="payment_type2">Forma de Pagamento: </label>
+      <select id="payment_type" name="payment_type2">
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Cartão">Cartão</option>
+        <option value="PIX">PIX</option>
+        <option value="Boleto">Boleto</option>
+    </select>
+    </div>    
+    <div class="form-group">
+        <label for="meeting-time">Data e horário do serviço: </label>
 
-        <input type="datetime-local" id="meeting-time" name="meeting-time" >    
+        <input type="datetime-local" id="meeting-time" name="meeting-time2" >    
     </div> 
     <div class="form-group">
       <label for="comments">Comentários (INTERNO)</label>
-      <textarea class="form-control" id="comments" rows="3"></textarea>
+      <textarea class="form-control" name="comments2" id="comments" rows="3"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Adcionar</button>
   </div>  

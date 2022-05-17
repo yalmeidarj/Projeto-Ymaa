@@ -27,6 +27,9 @@ login_manager.init_app(app)
 def load_user(UserID):
     return Users.query.get(UserID)
 
+
+
+
 class Users(UserMixin, db.Model):
   
     UserID = db.Column(db.Integer, primary_key=True)
@@ -59,7 +62,10 @@ class Services(db.Model):
     Name = db.Column(db.String(50), unique=False, nullable=False)
     LastName = db.Column(db.String(60), unique=False, nullable=False)
     Address = db.Column(db.String(400), unique=False, nullable=False)
-    is_finished = db.Column(db.Boolean, unique=False, nullable=False)
+    is_finished = db.Column(db.String(15), unique=False, nullable=False)
+    PayType = db.Column(db.String(15), unique=False, nullable=False)
+    DateTime = db.Column(db.String(40), unique=False, nullable=False)
+    Notes = db.Column(db.String(400), unique=False, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.Service_id
@@ -89,7 +95,33 @@ class Expenses(db.Model):
     def __repr__(self):
         return '<User %r>' % self.expense_id
 #Session = sessionmaker(bind=some_engine)
+events = [
+    {
+        'todo' : 'task',
+        'date' : '2022-05-17',
+    },
+    {
+        'todo' : 'task2',
+        'date' : '2022-05-17',
+    },    
+    {
+        'todo' : 'task3',
+        'date' : '2022-05-17',
+    },
+    {
+        'todo' : 'task4',
+        'date' : '2022-05-17',
+    },
+    {
+        'todo' : 'task5',
+        'date' : '2022-05-17',
+    },    
+    {
+        'todo' : 'task6',
+        'date' : '2022-05-17',
+    }
 
+]
 app.register_error_handler(404, page_not_found)
 
 @app.route('/', methods = ['GET','POST'])
@@ -155,7 +187,10 @@ def home():
 @app.route('/calendar')
 @login_required
 def calendar():
-  return render_template('calendar.html', **locals())
+  #global events
+  # date format YYYY-MM-DD
+  #events=events
+  return render_template('calendar.html', events=events)
 
 @app.route('/despesas', methods = ['GET','POST'])
 @login_required
@@ -202,8 +237,57 @@ def documentos():
   return render_template('documentos.html', **locals())
 
 @app.route('/al', methods = ['GET','POST'])
-#@login_required
+@login_required
 def al():
+  if request.method =="POST":
+    select = request.form.get('mval')
+    
+    if select == 'no':
+      # Fetch from 'Clientes' Table
+      # get from table, NOT FEED
+      clientID = request.form.get("ClientID")
+      my_client = db.session.query(Clientes).filter_by(Cliente_id=clientID).first()
+
+      # Feed 'Services' Table
+      description_service = request.form.get('service')
+      price = request.form.get('price')
+      pay_confirm = request.form.get('payment_confirmed')
+      pay_type = request.form.get("payment_type")
+      date_time = request.form.get("meeting-time")
+      notes = request.form.get("comments")
+      db.session.add(Services(Service_id=None, Service=description_service, Price=price, Client_id=clientID, Name=my_client.Name, LastName=my_client.LastName, Address=my_client.Address, is_finished=pay_confirm, PayType=pay_type, DateTime=date_time, Notes=notes ))
+      db.session.commit()
+    
+    else:
+      # Feed 'Clientes' Table
+      name = request.form.get('name')
+      lastName = request.form.get('lastName')
+      phone = request.form.get("phone")
+      email = request.form.get("email")
+      address = request.form.get("address")      
+      db.session.add(Clientes(Cliente_id=None, Name=name, LastName=lastName, Telefone=phone, Email=email, Address=address))
+      db.session.commit()      
+
+      # get clientID from last record in "Clientes"
+      #client = db.session.query(func.max(Clientes.Cliente_id)).first().select()
+      last = db.session.query(Clientes).order_by(Clientes.Cliente_id.desc()).first()
+      print(last,type(last))
+      print(last.Name)
+      #last = db.session.query(Clientes).filter_by(client).first()
+      #print(last)
+
+
+      # Feed 'Services' Table
+      description_service = request.form.get('service2')
+      price = request.form.get('price2')
+      pay_confirm = request.form.get('payment_confirmed2')
+      pay_type = request.form.get("payment_type2")
+      date_time = request.form.get("meeting-time2")
+      notes = request.form.get("comments2")
+      db.session.add(Services(Service_id=None, Service=description_service, Price=price, Client_id=last.Cliente_id, Name=last.Name, LastName=last.LastName, Address=last.Address, is_finished=pay_confirm, PayType=pay_type, DateTime=date_time, Notes=notes ))
+      db.session.commit()
+
+    return redirect(url_for('servicos'))
   return render_template('alternative_servicos.html', **locals())
 
 @app.route('/servicos', methods = ['GET','POST'])
@@ -249,16 +333,13 @@ def clientes():
   clientes = db.session.query(Clientes).all()
   
   if request.method == 'POST':
-    cliente_id = request.form["cliente_id"]
+    
     name = request.form["name"]
     lastName = request.form["lastName"]
     telefone = request.form["telefone"]
     email = request.form["email"]
     address = request.form["address"]
-    if cliente_id == '':
-      cliente_id = None
-
-    db.session.add(Clientes(Cliente_id=cliente_id, Name=name, LastName=lastName, Telefone=telefone, Email=email, Address=address))
+    db.session.add(Clientes(Cliente_id=None, Name=name, LastName=lastName, Telefone=telefone, Email=email, Address=address))
     db.session.commit()
     clientes = db.session.query(Clientes).all()
     #db.session.close()

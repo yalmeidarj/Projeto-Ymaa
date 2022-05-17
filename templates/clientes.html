@@ -20,53 +20,58 @@ $(document).ready(function() {
 
 
 	</script>
-  <button type="button" method="POST" class="btn btn primary" data-toggle="modal" data-target=".bd-example-modal-lg">Novo Cliente</button>
+  <span class="icon text-white-50">
+  <button type="button" method="POST" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bd-example-modal-lg">Novo Cliente</button>
+  </span>
   <br>
   <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="container">
         <form class="" action="/clientes" method="POST">
-
+        <br>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
 
-                                <input type="text" class="form-control" name="cliente_id"  placeholder="Cliente ID">
+                                <input type="text" class="form-control" name="name"  placeholder="Nome">
                             </div>
                         </div>
                     </div>            
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="service" placeholder="Descrição do Serviço">
+                                <input type="text" class="form-control" name="lastName" placeholder="Sobrenome">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="price" placeholder="Valor">
+                                <input type="text" class="form-control" name="telefone" placeholder="Telefone">
                             </div>
                         </div>
                     </div>                
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="address" placeholder="Endereço">
+                                <input type="text" class="form-control" name="email" placeholder="Email">
                             </div>
                         </div>
                     </div> 
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="address" placeholder="Endereço">
+                            </div>
+                        </div>
+                    </div>
 
-          <label for="payment_confirmed">Requer N.F? </label>
-          <select id="country" name="country">
-            <option value="True">Sim</option>
-            <option value="False">Não</option>
-          </select>
-          <br>
           <br>
 
           <button type="submit" method="POST" class="btn btn-success btn-circle">✓</button>
+          <br>
+          <br>
 
         </form>
       </div>
@@ -102,74 +107,16 @@ $(document).ready(function() {
                         <td>{{clientes.Telefone}}</td>
                         <td>{{clientes.Email}}</td>
                         <td>{{clientes.Address}}</td>
-                        <td>                        
-  <button type="button" method="POST" class="bg-gradient-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Adcionar Serviço</button>
-  <br>
-  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="container">
-        <form class="" action="/servicos" method="POST">
-                    <label for="payment_confirmed">Pagamento recebido?</label>
-                    <select id="country" name="country">
-                        <option value="True">Sim</option>
-                        <option value="False">Não</option>
-                    </select>            
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="Service" placeholder="Descrição do serviço">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="price" placeholder="Valor recebido">
-                            </div>
-                        </div>
-                    </div>
+                            <td><div class="mb-4"></div>
+                                <div class="col mr-2">
+                                    <a href="#" class="btn btn-primary btn-sm">
+                                        <span value="{{clientes.Cliente_id}}" class="icon text-white-50">
+                                            
+                                        </span>
+                                        <span class="text">Ver Comentários</span>
+                                    </a>
+                                </div></td>                        
                     
-
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Nome">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="lastName" placeholder="Sobrenome">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="address" placeholder="Endereço">
-                            </div>
-                        </div>
-                    </div> 
-
-          <label for="payment_confirmed">Pagamento recebido?</label>
-          <select id="country" name="country">
-            <option value="True">Sim</option>
-            <option value="False">Não</option>
-          </select>
-          <br>
-          <br>
-
-          <button type="submit" value={{clientes.Cliente_id}} method="POST" name="button">Adcionar</button>
-
-        </form>
-      </div>
-    </div>
-
                     </tr>
                     {% endfor %}
                     
