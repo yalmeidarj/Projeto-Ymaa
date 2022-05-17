@@ -8,6 +8,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import sqlite3
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+import datetime
+
 
 def page_not_found(e):
   return render_template('404.html'), 404
@@ -96,32 +98,79 @@ class Expenses(db.Model):
         return '<User %r>' % self.expense_id
 #Session = sessionmaker(bind=some_engine)
 events = [
-    {
-        'todo' : 'task',
-        'date' : '2022-05-17',
-    },
-    {
-        'todo' : 'task2',
-        'date' : '2022-05-17',
-    },    
-    {
-        'todo' : 'task3',
-        'date' : '2022-05-17',
-    },
-    {
-        'todo' : 'task4',
-        'date' : '2022-05-17',
-    },
-    {
-        'todo' : 'task5',
-        'date' : '2022-05-17',
-    },    
-    {
-        'todo' : 'task6',
-        'date' : '2022-05-17',
-    }
-
+    # {
+    #     'todo' : 'task',
+    #     'date' : '2022-05-17',
+    #     'time' : '20:26'
+    # },
+    # {
+    #     'todo' : 'task2',
+    #     'date' : '2022-05-17',
+    #     'time' : '15:26'
+    # },    
+    # {
+    #     'todo' : 'task3',
+    #     'date' : '2022-05-22',
+    # },
+    # {
+    #     'todo' : 'task4',
+    #     'date' : '2022-06-17',
+    # },
+    # {
+    #     'todo' : 'task5',
+    #     'date' : '2022-05-28',
+    # },    
+    # {
+    #     'todo' : 'task6',
+    #     'date' : '2022-05-19',
+    # },
+    # {
+    #     'todo' : 'task',
+    #     'date' : '2022-05-18',
+    # },
+    # {
+    #     'todo' : 'task2',
+    #     'date' : '2022-07-27',
+    # },    
+    # {
+    #     'todo' : 'task3',
+    #     'date' : '2022-05-25',
+    # },
+    # {
+    #     'todo' : 'task4',
+    #     'date' : '2022-05-17',
+    # },
+    # {
+    #     'todo' : 'task5',
+    #     'date' : '2022-05-17',
+    # },    
+    # {
+    #     'todo' : 'task6',
+    #     'date' : '2022-05-17',
+    # }
 ]
+
+######################
+
+# DATETIMES = db.session.query(Services.DateTime).all()
+# # n = ''.join(str(DATETIMES).split(','))
+# # print(n)
+# for timeDate in DATETIMES :
+#   timeDate = ''.join(str(timeDate).split(','))
+#   print(timeDate)
+#   if timeDate != '(None)':
+#     new_event = {
+#     'todo': 'timeDate.Service',
+#     'date': timeDate[:12],
+#     'time': timeDate[13:18]
+#     }
+#     events.append(new_event)
+#   else:
+#     print('nothing')
+    
+#   print(events)
+
+############################
 app.register_error_handler(404, page_not_found)
 
 @app.route('/', methods = ['GET','POST'])
@@ -191,6 +240,16 @@ def calendar():
   # date format YYYY-MM-DD
   #events=events
   return render_template('calendar.html', events=events)
+
+@app.route('/timeline')
+@login_required
+def timeline():
+  now = datetime.datetime.today()
+  #events = events 
+  #global events
+  # date format YYYY-MM-DD
+  #events=events
+  return render_template('timeline.html',events = events,  **locals())
 
 @app.route('/despesas', methods = ['GET','POST'])
 @login_required
