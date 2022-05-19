@@ -17,9 +17,9 @@ def page_not_found(e):
 app = Flask(__name__)
 app.config.from_object(config.config['development'])
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Ymaa.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Ymaa.db"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://xapeinklrmhmgi:c5ff377bc3ac6a2df30d77509faebf6b675ed7fbe423d200da8421d720ce8211@ec2-52-4-104-184.compute-1.amazonaws.com:5432/d1ga277dqgc801"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://xapeinklrmhmgi:c5ff377bc3ac6a2df30d77509faebf6b675ed7fbe423d200da8421d720ce8211@ec2-52-4-104-184.compute-1.amazonaws.com:5432/d1ga277dqgc801"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
