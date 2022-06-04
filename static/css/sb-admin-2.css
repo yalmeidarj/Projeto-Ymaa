@@ -11279,3 +11279,14 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+.img_container {
+  width: 20px;
+  height: 12px;
+}
+
+/* Resize images */
+.img_container img {
+  width: 10%;
+  height: auto;
+}

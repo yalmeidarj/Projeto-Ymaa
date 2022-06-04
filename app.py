@@ -1,4 +1,5 @@
 import email
+from operator import ne
 from select import select
 from flask import Flask, flash, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
@@ -9,7 +10,10 @@ import config
 import sqlite3
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import datetime
+from babel.dates import format_datetime
 
+
+#print(f'My date in pt=BR: {today_ptBR}')
 
 def page_not_found(e):
   return render_template('404.html'), 404
@@ -17,7 +21,7 @@ def page_not_found(e):
 app = Flask(__name__)
 app.config.from_object(config.config['development'])
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Ymaa.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://hostman:4e12f875@143.198.52.41:5433/database"
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://xapeinklrmhmgi:c5ff377bc3ac6a2df30d77509faebf6b675ed7fbe423d200da8421d720ce8211@ec2-52-4-104-184.compute-1.amazonaws.com:5432/d1ga277dqgc801"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -118,41 +122,28 @@ events = [
     #     'date' : '2022-06-17',
     # },
     # {
-    #     'todo' : 'task5',
-    #     'date' : '2022-05-28',
-    # },    
-    # {
-    #     'todo' : 'task6',
-    #     'date' : '2022-05-19',
-    # },
-    # {
-    #     'todo' : 'task',
-    #     'date' : '2022-05-18',
-    # },
-    # {
-    #     'todo' : 'task2',
-    #     'date' : '2022-07-27',
-    # },    
-    # {
-    #     'todo' : 'task3',
-    #     'date' : '2022-05-25',
-    # },
-    # {
-    #     'todo' : 'task4',
-    #     'date' : '2022-05-17',
-    # },
-    # {
-    #     'todo' : 'task5',
-    #     'date' : '2022-05-17',
-    # },    
-    # {
     #     'todo' : 'task6',
     #     'date' : '2022-05-17',
     # }
 ]
 
-######################
 
+new_event = db.session.query(Services.DateTime).all()
+print(new_event)
+for event in new_event:
+  #event = ''.join(str(event).split(','))
+  if event == (None,):
+    pass
+  else:
+    event = ''.join(str(event).split(','))
+    print(event)
+    event_to_add = {
+    #'todo': 'timeDate.Service',
+    'date': event[2:12],
+    'time': event[13:18]
+    }
+    events.append(event_to_add)
+print(events)
 # DATETIMES = db.session.query(Services.DateTime).all()
 # # n = ''.join(str(DATETIMES).split(','))
 # # print(n)
@@ -245,7 +236,8 @@ def calendar():
 @app.route('/timeline')
 @login_required
 def timeline():
-  now = datetime.datetime.today()
+  today = datetime.datetime.today().strftime
+  #today_ptBR = format_datetime(today, format='full')
   #events = events 
   #global events
   # date format YYYY-MM-DD
