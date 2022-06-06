@@ -13,7 +13,6 @@ import datetime
 from babel.dates import format_datetime
 
 
-#print(f'My date in pt=BR: {today_ptBR}')
 
 def page_not_found(e):
   return render_template('404.html'), 404
@@ -21,9 +20,9 @@ def page_not_found(e):
 app = Flask(__name__)
 app.config.from_object(config.config['development'])
 
+##### Db config 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://hostman:4e12f875@143.198.52.41:5433/database"
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://xapeinklrmhmgi:c5ff377bc3ac6a2df30d77509faebf6b675ed7fbe423d200da8421d720ce8211@ec2-52-4-104-184.compute-1.amazonaws.com:5432/d1ga277dqgc801"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -257,14 +256,13 @@ def despesas():
     is_paid = request.form.get("payment_confirmed_select")
     db.session.add(Expenses(expense_id=None, amount=amount, category=category, description=description, tdate=date, type=type_of_payment, is_paid=is_paid))
     db.session.commit()
-    #my_client = db.session.query(Clients).all()
-    #db.session.close()
 
     return redirect(url_for('financeiro'))
   else:
-    expense_value = [i[0] for i in db.session.query(Expenses.amount).all()]
+    expense_value = [expense[0] for expense in db.session.query(Expenses.amount).all()]
     print("Expense value:")
     print(sum(expense_value))
+
     return render_template('despesas.html', **locals())
 
 @app.route('/financeiro')
