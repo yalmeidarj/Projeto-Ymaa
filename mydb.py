@@ -47,10 +47,45 @@ class Clientes(db.Model):
 
     # def __repr__(self):
     #     return '<User %r>' % self.Cliente_id
+class Services(db.Model):
 
-c = db.session.query(Clientes.Name).all()
-print(c)
+    Service_id = db.Column(db.Integer, primary_key=True)
+    Service = db.Column(db.String(400), unique=False, nullable=False)
+    Price = db.Column(db.Float, nullable=False)
+    Client_id = db.Column(db.Integer, unique=False, nullable=False)
+    Name = db.Column(db.String(50), unique=False, nullable=False)
+    LastName = db.Column(db.String(60), unique=False, nullable=False)
+    Address = db.Column(db.String(400), unique=False, nullable=False)
+    is_finished = db.Column(db.String(15), unique=False, nullable=False)
+    PayType = db.Column(db.String(15), unique=False, nullable=False)
+    DateTime = db.Column(db.String(40), unique=False, nullable=False)
+    Notes = db.Column(db.String(400), unique=False, nullable=False)
 
+    def __repr__(self):
+        return '<User %r>' % self.Service_id
+
+events = [
+
+]
+
+
+new_event = db.session.query(Services.DateTime).all()
+print(new_event)
+for event in new_event:
+  #event = ''.join(str(event).split(','))
+  if event == (None,):
+    pass
+  else:
+    event = ''.join(str(event).split(','))
+    print(event)
+    event_to_add = {
+    #'todo': 'timeDate.Service',
+    'date': event[2:12],
+    'time': event[13:18]
+    }
+    if event_to_add.date == 1:
+        events.append(event_to_add)
+print(events)
 # cur =  conn.cursor()
 # cur.execute('SELECT * FROM Clientes;')
 # clientes = cur.fetchall()
