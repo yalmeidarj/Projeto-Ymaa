@@ -34,8 +34,6 @@ def load_user(UserID):
     return Users.query.get(UserID)
 
 
-
-
 class Users(UserMixin, db.Model):
   
     UserID = db.Column(db.Integer, primary_key=True)
@@ -100,7 +98,7 @@ class Expenses(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.expense_id
-#Session = sessionmaker(bind=some_engine)
+
 events = [
     # {
     #     'todo' : 'task',
@@ -143,23 +141,7 @@ for event in new_event:
     }
     events.append(event_to_add)
 print(events)
-# DATETIMES = db.session.query(Services.DateTime).all()
-# # n = ''.join(str(DATETIMES).split(','))
-# # print(n)
-# for timeDate in DATETIMES :
-#   timeDate = ''.join(str(timeDate).split(','))
-#   print(timeDate)
-#   if timeDate != '(None)':
-#     new_event = {
-#     'todo': 'timeDate.Service',
-#     'date': timeDate[:12],
-#     'time': timeDate[13:18]
-#     }
-#     events.append(new_event)
-#   else:
-#     print('nothing')
-    
-#   print(events)
+
 
 ############################
 app.register_error_handler(404, page_not_found)
@@ -275,11 +257,23 @@ def financeiro():
   pay_received = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2))
   balance = "${:,.2f}".format(round(pay - expense, 2))
   service_id = Clientes.Cliente_id
-  # def getme():
-  #   db.session.query(Clientes.Cliente_id where expense)
 
 
   return render_template('cards.html', **locals())
+
+@app.route('/tf')
+@login_required
+def tf():
+   
+  expense = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
+  pay = round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2)
+  expense_value = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2))
+  pay_received = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2))
+  balance = "${:,.2f}".format(round(pay - expense, 2))
+  service_id = Clientes.Cliente_id
+
+
+  return render_template('testingdespesas.html', **locals())
 
 @app.route('/documentos')
 @login_required
