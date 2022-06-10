@@ -68,8 +68,9 @@ class Services(db.Model):
     Address = db.Column(db.String(400), unique=False, nullable=False)
     is_finished = db.Column(db.String(15), unique=False, nullable=False)
     PayType = db.Column(db.String(15), unique=False, nullable=False)
-    DateTime = db.Column(db.String(40), unique=False, nullable=False)
+    service_date = db.Column(db.String(40), unique=False, nullable=False)
     Notes = db.Column(db.String(400), unique=False, nullable=False)
+    service_time = db.Column(db.String(60), unique=False, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.Service_id
@@ -125,7 +126,7 @@ events = [
 ]
 
 
-new_event = db.session.query(Services.DateTime).all()
+new_event = db.session.query(Services.service_date).all()
 print(new_event)
 for event in new_event:
   #event = ''.join(str(event).split(','))
@@ -265,11 +266,11 @@ def financeiro():
 @login_required
 def tf():
    
-  expense = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
-  pay = round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2)
-  expense_value = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2))
-  pay_received = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2))
-  balance = "${:,.2f}".format(round(pay - expense, 2))
+  expense_today = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
+  pay_today = round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2)
+  expense_value_today = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2))
+  pay_received_today = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2))
+  balance_today = "${:,.2f}".format(round(pay_today - expense_today, 2))
   service_id = Clientes.Cliente_id
 
 
@@ -298,8 +299,11 @@ def al():
       pay_confirm = request.form.get('payment_confirmed')
       pay_type = request.form.get("payment_type")
       date_time = request.form.get("meeting-time")
+      schedule = ''.join(str(date_time).split(','))
+      date = schedule[2:10]
+      time = schedule[11:18]
       notes = request.form.get("comments")
-      db.session.add(Services(Service_id=None, Service=description_service, Price=price, Client_id=clientID, Name=my_client.Name, LastName=my_client.LastName, Address=my_client.Address, is_finished=pay_confirm, PayType=pay_type, DateTime=date_time, Notes=notes ))
+      db.session.add(Services(Service_id=None, Service=description_service, Price=price, Client_id=clientID, Name=my_client.Name, LastName=my_client.LastName, Address=my_client.Address, is_finished=pay_confirm, PayType=pay_type, service_date=date, service_time=time, Notes=notes ))
       db.session.commit()
     
     else:
