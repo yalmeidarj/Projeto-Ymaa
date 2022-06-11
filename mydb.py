@@ -20,15 +20,6 @@ username = 'hostman'
 pwd = '4e12f875'
 port_id = 5433
 
-# conn = psycopg2.connect(
-#     host = hostname,
-#     dbname = database,
-#     user = username,
-#     password = pwd,
-#     port = port_id
-# )
-
-
 app = Flask(__name__)
 app.config.from_object(config.config['development'])
 
@@ -58,8 +49,9 @@ class Services(db.Model):
     Address = db.Column(db.String(400), unique=False, nullable=False)
     is_finished = db.Column(db.String(15), unique=False, nullable=False)
     PayType = db.Column(db.String(15), unique=False, nullable=False)
-    DateTime = db.Column(db.String(40), unique=False, nullable=False)
+    service_date = db.Column(db.String(40), unique=False, nullable=False)
     Notes = db.Column(db.String(400), unique=False, nullable=False)
+    service_time = db.Column(db.String(60), unique=False, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.Service_id
@@ -69,8 +61,8 @@ events = [
 ]
 
 
-new_event = db.session.query(Services.DateTime).all()
-print(new_event)
+new_event = db.session.query(Services.service_date).all()
+#print(new_event)
 for event in new_event:
   #event = ''.join(str(event).split(','))
   if event == (None,):
@@ -83,74 +75,10 @@ for event in new_event:
     'date': event[2:12],
     'time': event[13:18]
     }
-    if event_to_add.date == 1:
-        events.append(event_to_add)
+    #if event_to_add.date == 1:
+    events.append(event_to_add)
 print(events)
-# cur =  conn.cursor()
-# cur.execute('SELECT * FROM Clientes;')
-# clientes = cur.fetchall()
-# print(clientes)
-# cur.close()
 
-# class Users(UserMixin, db.Model):
-  
-#     UserID = db.Column(db.Integer, primary_key=True)
-#     UserName = db.Column(db.String(50), unique=True, nullable=False)
-#     Password = db.Column(db.String(12), unique=False, nullable=False) 
-
-#     def get_id(self):
-#            return (self.UserID)
-
-#     def __repr__(self):
-#         return '<User %r>' % self.UserID
-
-# class requests(db.Model):
-  
-#     UserID = db.Column(db.Integer, primary_key=True)
-#     Name = db.Column(db.String(50), unique=True, nullable=False)
-#     LastName = db.Column(db.String(50), unique=False, nullable=False)
-#     UserName = db.Column(db.String(50), unique=True, nullable=False)
-#     Password = db.Column(db.String(100), unique=False, nullable=False)
-
-#     def __repr__(self):
-#         return '<User %r>' % self.UserID
-
-# class Services(db.Model):
-
-#     Service_id = db.Column(db.Integer, primary_key=True)
-#     Service = db.Column(db.String(400), unique=False, nullable=False)
-#     Price = db.Column(db.Float, nullable=False)
-#     Client_id = db.Column(db.Integer, unique=False, nullable=False)
-#     Name = db.Column(db.String(50), unique=False, nullable=False)
-#     LastName = db.Column(db.String(60), unique=False, nullable=False)
-#     Address = db.Column(db.String(400), unique=False, nullable=False)
-#     is_finished = db.Column(db.String(15), unique=False, nullable=False)
-#     PayType = db.Column(db.String(15), unique=False, nullable=False)
-#     DateTime = db.Column(db.String(40), unique=False, nullable=False)
-#     Notes = db.Column(db.String(400), unique=False, nullable=False)
-
-#     def __repr__(self):
-#         return '<User %r>' % self.Service_id
-
-
-# class Expenses(db.Model):
-  
-#     expense_id = db.Column(db.Integer, primary_key=True)
-#     amount = db.Column(db.Float, unique=False, nullable=False)
-#     category = db.Column(db.String(50), unique=False, nullable=False)
-#     description = db.Column(db.String(150), unique=False, nullable=False)
-#     tdate = db.Column(db.String(20), unique=False, nullable=False)
-#     type = db.Column(db.String(20), unique=False, nullable=False)
-#     is_paid = db.Column(db.String(5), unique=False, nullable=False)
-
-#     def __repr__(self):
-#         return '<User %r>' % self.expense_id
-
-# db.create_all()
-# 
-# db.session.commit()
-
-#conn.close()
 
 
 

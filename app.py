@@ -300,10 +300,14 @@ def al():
       pay_type = request.form.get("payment_type")
       date_time = request.form.get("meeting-time")
       schedule = ''.join(str(date_time).split(','))
-      date = schedule[2:10]
+      date = schedule[:10]
       time = schedule[11:18]
       notes = request.form.get("comments")
-      db.session.add(Services(Service_id=None, Service=description_service, Price=price, Client_id=clientID, Name=my_client.Name, LastName=my_client.LastName, Address=my_client.Address, is_finished=pay_confirm, PayType=pay_type, service_date=date, service_time=time, Notes=notes ))
+
+      db.session.add(Services(Service_id=None, Service=description_service, Price=price,
+      Client_id=clientID, Name=my_client.Name, LastName=my_client.LastName, Address=my_client.Address,
+      is_finished=pay_confirm, PayType=pay_type, service_date=date, service_time=time, Notes=notes ))
+
       db.session.commit()
     
     else:
@@ -319,20 +323,22 @@ def al():
       # get clientID from last record in "Clientes"
       #client = db.session.query(func.max(Clientes.Cliente_id)).first().select()
       last = db.session.query(Clientes).order_by(Clientes.Cliente_id.desc()).first()
-      print(last,type(last))
-      print(last.Name)
-      #last = db.session.query(Clientes).filter_by(client).first()
-      #print(last)
-
 
       # Feed 'Services' Table
       description_service = request.form.get('service2')
       price = request.form.get('price2')
       pay_confirm = request.form.get('payment_confirmed2')
       pay_type = request.form.get("payment_type2")
-      date_time = request.form.get("meeting-time2")
+      date_time = request.form.get("meeting-time2")            
+      schedule = ''.join(str(date_time).split(','))
+      date = schedule[:10]
+      time = schedule[11:18]
       notes = request.form.get("comments2")
-      db.session.add(Services(Service_id=None, Service=description_service, Price=price, Client_id=last.Cliente_id, Name=last.Name, LastName=last.LastName, Address=last.Address, is_finished=pay_confirm, PayType=pay_type, DateTime=date_time, Notes=notes ))
+
+      db.session.add(Services(Service_id=None, Service=description_service, Price=price, 
+      Client_id=last.Cliente_id, Name=last.Name, LastName=last.LastName, Address=last.Address,
+      is_finished=pay_confirm, PayType=pay_type, service_date=date, service_time=time, Notes=notes ))
+
       db.session.commit()
 
     return redirect(url_for('servicos'))
