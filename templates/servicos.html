@@ -3,9 +3,70 @@
 	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://www.datatables.net/rss.xml">
 	<link rel="stylesheet" type="text/css" href="/media/css/site-examples.css?_=94461d89946ef749b7a43d14685c725d1">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-	<style type="text/css" class="init">
+	<style type="text/css" class="init"></style>
+    <style>
+        .asText {
+            border: none;
+            background-color: inherit;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+            }
 
-	</style>
+            /* Green */
+            .success {
+            color: green;
+            }
+
+            .success:hover {
+            background-color: #04AA6D;
+            color: white;
+            }
+
+            /* Blue */
+            .info {
+            color: dodgerblue;
+            }
+
+            .info:hover {
+            background: #2196F3;
+            color: white;
+            }
+
+            /* Orange */
+            .warning {
+            color: orange;
+            }
+
+            .warning:hover {
+            background: #ff9800;
+            color: white;
+            }
+
+            /* Red */
+            .danger {
+            color: red;
+            }
+
+            .danger:hover {
+            background: #f44336;
+            color: white;
+            }
+
+            /* Gray */
+            .default {
+            color: black;
+            }
+
+            .default:hover {
+            background: #2196F3;
+            color: white;
+            }
+
+
+    </style>
+	<!-- </style> -->
     <script>document.getElementById('today').value = moment().format('YYYY-MM-DD');
     </script>
 	<script type="text/javascript" src="/media/js/site.js?_=64232ba754b2748258f2324e5f9e21f9"></script>
@@ -13,8 +74,8 @@
 	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
-	<script type="text/javascript" class="init">
-
+	<script type="text/javascript" class="init"></script>
+    <script>   
 
 $(document).ready(function() {
 	$('table').DataTable();
@@ -22,7 +83,7 @@ $(document).ready(function() {
 
 
 	</script>
-  <form method="POST" action="/al">
+  <form method="POST" action="/al" name="submit_button" value="add">
   <div class="text">
       <a class="btn btn-primary btn-sm" href="/al">Adicionar Serviço</a>
   </form>
@@ -51,37 +112,119 @@ $(document).ready(function() {
                     </tr>
                 </thead>
                 <tbody>
-                    {% for all_services in all_services %}
+                    {% for service in all_services %}
                     <tr>
-                        <td>{{all_services.Service_id}}</td>
-                        <td>{{all_services.Service}}</td>
-                        <td>{{all_services.Price}}</td>
-                        <td>{{all_services.Client_id}}</td>
-                        <td>{{all_services.Name}} {{all_services.LastName}}</td>
-                        <td>{{all_services.Address}}</td>
-                        <td>                        <div class="mb-4"></div>
-                            <div class="col mr-2">
-                                <a href="#" class="btn btn-primary btn-sm">
-                                    <span class="icon text-white-50">
-                                        
-                                    </span>
-                                    <span class="text">Confirmar</span>
-                                </a>
-                            </div></td>
+                        <!-- <td>{{service.Service_id}}</td> -->
+                        <td>
+                            
+                            <form action="{{ url_for('servicos') }}" method="POST">
+                                <input id="s_id" name="s_id" type="hidden" value="{{ service.Notes }}">
+                                <button type="submit" class="asText default" name="sid" data-toggle="modal" data-target=".bd-example-modal-lg" value="{{ service.Notes }}"
+                                            formmethod="post">{{service.Service_id}}</button>
+                            
+                            
+                            </form>
+                                                       
+                            
+                        </td>
+
+
+                        <td>{{service.Service}}</td>
+                        <td>{{service.Price}}</td>
+                        <td>{{service.Client_id}}</td>
+                        <td>{{service.Name}} {{all_services.LastName}}</td>
+                        <td>{{service.Address}}</td>                        
+                        <!-- <input id="confirm" name="confirm" type="hidden" value="{{service.is_finished}}"> -->
+                        <td>{{service.is_finished}}
+                        
+                            <form action="{{ url_for('servicos') }}">
+                                <input id="book_id" name="book_id" type="hidden" value="{{ service.is_finished }}">
+                                <button type="submit" class="btn btn-primary btn-sm" name="confirm_pay" value="{{ service.is_finished }}"
+                                            formmethod="post">Editar</button>
+                            </form>
+                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="container">
+                                            <form class="" action="/servicos" method="POST">
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="form-group">
+                                                        <label for="service_notes">{ % request.form.get("sid") % }</label>
+                                                    </div>
+                                                </div>
+                                            </div>            
+                 
+                                        </div>                
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <!-- <td><button type="submit" name="Do Something" class="btn btn-primary btn-sm" value="Do Something" formmethod="POST">Confirmar</button></td> -->
+
                     </tr>
                     {% endfor %}
                     
 
                 </tbody>
             </table>
-    </div>
 
-    <!-- <script>
-    function myFunction() {
-        var x = document.getElementById("client_type").value;
-        document.getElementById("demo").innerHTML = x;
-    }
-    </script> -->
+    </div>
+  <!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="container">
+        <form class="" action="/clientes" method="POST">
+        <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+
+                                <input type="text" class="form-control" name="name"  placeholder="Nome">
+                            </div>
+                        </div>
+                    </div>            
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="lastName" placeholder="Sobrenome">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="telefone" placeholder="Telefone">
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="email" placeholder="Email">
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="address" placeholder="Endereço">
+                            </div>
+                        </div>
+                    </div>
+                  </div>       
+                  </div> -->
+
+          <br>
+
+          <button type="submit" class="btn btn-primary">Adicionar</button>
+          <br>
+          <br>
+
+        </form>
+      </div>
+    </div>
     {% block scripts %}{% endblock %}
     {% endblock %}
   </body>
