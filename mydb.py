@@ -1,5 +1,5 @@
 import psycopg2
-
+import datetime
 import email
 from operator import ne
 from select import select
@@ -36,8 +36,22 @@ class Clientes(db.Model):
     Email = db.Column(db.String(60), unique=False, nullable=False)
     Address = db.Column(db.String(400), unique=False, nullable=False)
 
-    # def __repr__(self):
-    #     return '<User %r>' % self.Cliente_id
+    def __repr__(self):
+        return '<User %r>' % self.Cliente_id
+
+class Expenses(db.Model):
+  
+    expense_id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Float, unique=False, nullable=False)
+    category = db.Column(db.String(50), unique=False, nullable=False)
+    description = db.Column(db.String(150), unique=False, nullable=False)
+    tdate = db.Column(db.String(20), unique=False, nullable=False)
+    type = db.Column(db.String(20), unique=False, nullable=False)
+    is_paid = db.Column(db.String(5), unique=False, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.expense_id
+
 class Services(db.Model):
 
     Service_id = db.Column(db.Integer, primary_key=True)
@@ -56,95 +70,26 @@ class Services(db.Model):
     def __repr__(self):
         return '<User %r>' % self.Service_id
 
-events = [
+today = datetime.datetime.today()
+past_week = today - datetime.timedelta(days=9)
+past_30days = today - datetime.timedelta(days=30)
+list_past_week = db.session.query(Services).filter(Services.service_date.between(str(past_week), str(today))).all()
+list_past_30days = db.session.query(Services).filter(Services.service_date.between(str(past_30days), str(today))).all()
 
-]
-
-
-new_event = db.session.query(Services.service_date).all()
-#print(new_event)
-for event in new_event:
-  #event = ''.join(str(event).split(','))
-  if event == (None,):
-    pass
-  else:
-    event = ''.join(str(event).split(','))
-    print(event)
-    event_to_add = {
-    #'todo': 'timeDate.Service',
-    'date': event[2:12],
-    'time': event[13:18]
-    }
-    #if event_to_add.date == 1:
-    events.append(event_to_add)
-print(events)
+expenses_past_week = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_week), str(today))).all()
+expenses_past_30days = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_30days), str(today))).all()
 
 
+sum_past_week = round(sum([i.Price for i in list_past_week]), 2)
+sum_past_30days = round(sum([i.Price for i in list_past_30days]), 2)
 
+expenses_sum_past_week = round(sum([i.amount for i in expenses_past_week]), 2)
+expenses_sum_past_30days = round(sum([i.amount for i in expenses_past_30days]), 2)
 
+balance_past_week = sum_past_week - expenses_sum_past_week
+balance_past_30days = sum_past_30days - expenses_sum_past_30days
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#
-#  from flask import Flask, render_template, request, redirect, url_for
-# from flask_sqlalchemy import SQLAlchemy
-# #import requests
-# import config
-# import sqlite3
-# from werkzeug.security import generate_password_hash, check_password_hash
-
-# app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///Ymaa.db"
-
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# db = SQLAlchemy(app)
-
-
-# class Client(db.Model):
-
-#     Service_id = db.Column(db.Integer, primary_key=True)
-#     Service = db.Column(db.String(400), unique=False, nullable=False)
-#     price = db.Column(db.Integer, unique=False, nullable=False)
-#     Client_id = db.Column(db.Integer, unique=False, nullable=False)
-#     Name = db.Column(db.String(50), unique=False, nullable=False)
-#     LastName = db.Column(db.String(60), unique=False, nullable=False)
-#     Address = db.Column(db.String(400), unique=False, nullable=False)
-
-#     def __repr__(self):
-#         return '<User %r>' % self.Service_id
-
-
-# class Users(db.Model):
-  
-#     UserID = db.Column(db.Integer, primary_key=True)
-#     UserName = db.Column(db.String(50), unique=True, nullable=False)
-#     Password = db.Column(db.String(12), unique=False, nullable=False)
-
-#     def __repr__(self):
-#         return '<User %r>' % self.user_id
-
-
-
-
-
-# db.session.add(Users(UserID=None, UserName=email, Password=generate_password_hash(pwd, method='sha256')))
-# db.session.commit()
-
-
-
-
+report = f'Total made and spent last week: {sum_past_week}/ {expenses_sum_past_week}\nTotal made and spent last 30 days: {sum_past_30days}/ {expenses_sum_past_30days}\nBalance last week: {balance_past_week }\nBalance last 30 days: {balance_past_30days}'
+print(report)
 
 

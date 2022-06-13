@@ -251,20 +251,54 @@ def despesas():
 @app.route('/financeiro')
 @login_required
 def financeiro():
+  day_today = datetime.datetime.today()
+  past_week = day_today - datetime.timedelta(days=9)
+  past_30days = day_today - datetime.timedelta(days=30)
+  expenses_past_week = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_week), str(day_today))).all()
+  expenses_past_30days = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_30days), str(day_today))).all()
+  list_past_week = db.session.query(Services).filter(Services.service_date.between(str(past_week), str(day_today))).all()
+  list_past_30days = db.session.query(Services).filter(Services.service_date.between(str(past_30days), str(day_today))).all()
+
+  sum_past_week = round(sum([i.Price for i in list_past_week]), 2)
+  sum_past_30days = round(sum([i.Price for i in list_past_30days]), 2)
+
+  expenses_sum_past_week = round(sum([i.amount for i in expenses_past_week]), 2)
+  expenses_sum_past_30days = round(sum([i.amount for i in expenses_past_30days]), 2)
+
+  balance_past_week = sum_past_week - expenses_sum_past_week
+  balance_past_30days = sum_past_30days - expenses_sum_past_30days
+  
    
-  expense = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
-  pay = round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2)
-  expense_value = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2))
-  pay_received = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2))
-  balance = "${:,.2f}".format(round(pay - expense, 2))
+  expense_today = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
+  pay_today = round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2)
+  expense_value_today = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2))
+  pay_received_today = "${:,.2f}".format(round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2))
+  balance_today = "${:,.2f}".format(round(pay_today - expense_today, 2))
   service_id = Clientes.Cliente_id
 
 
-  return render_template('cards.html', **locals())
+  return render_template('financeiro.html', **locals())
 
 @app.route('/tf')
 @login_required
 def tf():
+  day_today = datetime.datetime.today()
+  past_week = day_today - datetime.timedelta(days=9)
+  past_30days = day_today - datetime.timedelta(days=30)
+  expenses_past_week = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_week), str(day_today))).all()
+  expenses_past_30days = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_30days), str(day_today))).all()
+  list_past_week = db.session.query(Services).filter(Services.service_date.between(str(past_week), str(day_today))).all()
+  list_past_30days = db.session.query(Services).filter(Services.service_date.between(str(past_30days), str(day_today))).all()
+
+  sum_past_week = round(sum([i.Price for i in list_past_week]), 2)
+  sum_past_30days = round(sum([i.Price for i in list_past_30days]), 2)
+
+  expenses_sum_past_week = round(sum([i.amount for i in expenses_past_week]), 2)
+  expenses_sum_past_30days = round(sum([i.amount for i in expenses_past_30days]), 2)
+
+  balance_past_week = sum_past_week - expenses_sum_past_week
+  balance_past_30days = sum_past_30days - expenses_sum_past_30days
+  
    
   expense_today = round(sum([i[0] for i in db.session.query(Expenses.amount).all()]), 2)
   pay_today = round(sum([i[0] for i in db.session.query(Services.Price).all()]), 2)
