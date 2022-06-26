@@ -1,136 +1,69 @@
 {% extends 'layout.html' %} {% block body %}
 
-<!-- <style>
-  .inline-block{
-    display:inline-block
-  }
-  form {
-    max-width: 900px;
-    display: block;
-    margin: 0 auto;
-  }
-  </style>
-  <body>
-    <div class="testbox">
-      <form method="POST">
-
-        <br/>
-        <fieldset>
-          <legend>Adicionar Despesa</legend>
-          <br>
-<!-- <p>Detalhes da despesa</p> -->
-          <!-- <div class="inline-block">
-            <div class="item">
-
-              <input id="fname" type="text" name="price" placeholder="Valor" />
-            </div>
-            <br>
-            <div class="item">
-                        <p>Categoria da despesa</p>
-                        <select name="category__select" >
-                          <option selected value="Categoria"  disabled selected></option>
-                        <option value="1" >Alimentação</option>
-                          <option value="2">Combustível</option>
-                          <option value="2">Material</option>
-                        </select>
-                      </div>
-          </div>
-          <br>
-          <div class="item">             -->
-            <!-- <input id="activity" type="text" placeholder="Descrição"  name="activity" />
-          </div>
-                   <div class="item">
-            <label for="bdate">Data</label>
-            <input id="bdate" type="date" name="bdate" />
-            <i  class="fas fa-calendar-alt"></i>
-          </div>
- <div class="item">
-             <p>Tipo de pagamento:</p>
-            <select name="payment_type_select">
-              <option selected value="" disabled selected></option>
-             <option value="1" >Dinheiro</option>
-              <option value="2">Cartão</option>
-              <option value="3">Boleto</option>
-              <option value="3">Á Decidir</option>
-            </select>
-          </div>
- <div class="item">
-             <p>Pagamento concluído?</p>
-            <select name="payment_confirmed_select">
-              <option selected value="" disabled selected></option>
-             <option value="1" >Sim</option>
-              <option value="2">Não</option>
-            </select>
-          </div>
-
-        <div class="btn-block">
-          <button type="submit" method="POST" href="/">Concluir</button>
-        </div>
-      </form>
-    </div>
-  </body>
-</html> -->
 <style>
-form {
+/* form {
   max-width: 900px;
   display: block;
   margin: 0 auto;
-}
+} */
 </style>
-<form class="p-3" method="POST">
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <form class="p-3" method="POST">
 
-  <div class="form-group">
-    <label>Tipo de despesa:</label>
-      <select name="category__select" >
-        <option selected value="Categoria"  disabled selected></option>
-      <option value="1" >Alimentação</option>
-        <option value="2">Combustível</option>
-        <option value="2">Material</option>
-      </select>
-  </div>
-  <div class="form-group" id="firstDiv">
-    
-    <input type="text" name="price" placeholder="Valor" class="form-control" id="name"></input>
-  </div>
-  <br>
-  <div class="form-group">
-      
-      <input type="text" class="form-control" name="activity" placeholder="Descrição da despesa">
-  </div>
+        <div class="form-group">
+          <label>Tipo de despesa:</label>
+            <select name="category__select" >
+              <option selected value="Categoria"  disabled selected></option>
+            <option value="1" >Alimentação</option>
+              <option value="2">Combustível</option>
+              <option value="2">Material</option>
+            </select>
+        </div>
+        <div class="form-group" id="firstDiv">
+          
+          <input type="text" name="price" placeholder="Valor" class="form-control" id="name"></input>
+        </div>
+        <br>
+        <div class="form-group">
+            
+            <input type="text" class="form-control" name="activity" placeholder="Descrição da despesa">
+        </div>
 
 
-    <div class="form-group">
-      <label for="payment_type">Forma de Pagamento: </label>
-      <select id="payment_type" name="payment_type_select">
-        <option value="Dinheiro">Dinheiro</option>
-        <option value="Cartão">Cartão</option>
-        <option value="PIX">PIX</option>
-        <option value="Boleto">Boleto</option>
-        <option value="Cheque">Cheque</option>
-    </select>    
+          <div class="form-group">
+            <label for="payment_type">Forma de Pagamento: </label>
+            <select id="payment_type" name="payment_type_select">
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Cartão">Cartão</option>
+              <option value="PIX">PIX</option>
+              <option value="Boleto">Boleto</option>
+              <option value="Cheque">Cheque</option>
+            </select>    
+          </div>
+          <div class="form-group">
+            <label for="payment_type_select">Pagamento concluído? </label>
+            <select id="payment_type_select" name="payment_confirmed_select">
+              <option value="1" >Sim</option>
+              <option value="2" >Não</option>
+            </select>
+          <div class="form-group">
+            <label for="name">Data de pagamento: </label>
+
+            <input type="date" id="meeting-time" name="bdate" >    
+          </div> 
+
+          <button type="submit" class="btn btn-primary">Postar despesa</button>
+
+
+
+
+
+          
+
+        </form>
     </div>
-    <div class="form-group">
-      <label for="payment_type_select">Pagamento concluído? </label>
-      <select id="payment_type_select" name="payment_confirmed_select">
-        <option value="1" >Sim</option>
-        <option value="2" >Não</option>
-    </select>
-    <div class="form-group">
-      <label for="name">Data de pagamento: </label>
-
-      <input type="date" id="meeting-time" name="bdate" >    
-    </div> 
-
-    <button type="submit" class="btn btn-primary">Postar despesa</button>
   </div>
-
-  </div>  
-
-
-
-
-
-    
-
-  </form>
+</div>
 {% endblock %}

@@ -106,7 +106,7 @@ day_today = datetime.datetime.today()
 yesterday = day_today - datetime.timedelta(days=1)
 events = []
 
-todays_events = db.session.query(Services).filter(Services.service_date.between(str(yesterday), str(day_today))).all()
+todays_events = db.session.query(Services).all()
 
 indx = 0
 for event in todays_events:
@@ -119,7 +119,7 @@ for event in todays_events:
     'notes': todays_events[indx].Notes,
     }
     events.append(event_to_add)
-    indx =+ 1
+    indx += 1
 
 
 ############################
@@ -449,6 +449,11 @@ def clientes():
     
   return render_template('clientes.html', **locals())
 
+@app.route('/client_view')
+@login_required
+def client_view(client):
+   
+  return render_template('client_view.html', client=client, **locals())
 
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port='8888', debug=True)

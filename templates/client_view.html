@@ -1,0 +1,26 @@
+{% extends 'layout.html' %} {% block body %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Ymaa Desentupidora</h1>
+    <a
+      href="#"
+      class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+      ><i class="fas fa-download fa-sm text-white-50"></i> Criar Relatorio</a
+    >
+  </div>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <input id="client" name="client" type="hidden" value="{{ clientes.Cliente_id }}">{{ clientes.Cliente_id }}</input>
+        <h6 class="m-0 font-weight-bold text-primary">Nome do cliente</h6>
+    </div>   
+
+  </div>
+  
+
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}
