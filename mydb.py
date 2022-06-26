@@ -71,35 +71,69 @@ class Services(db.Model):
         return '<User %r>' % self.Service_id
 
 
-day_today = datetime.datetime.today()
-yesterday = day_today - datetime.timedelta(days=1)
-past_week = day_today - datetime.timedelta(days=7)
-past_30days = day_today - datetime.timedelta(days=30)
-list_past_week = db.session.query(Services).filter(Services.service_date.between(str(past_week), str(day_today))).all()
-list_past_30days = db.session.query(Services).filter(Services.service_date.between(str(past_30days), str(day_today))).all()
+today = datetime.date.today()
+#yesterday = day_today - datetime.timedelta(days=1)
 
-expenses_past_week = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_week), str(day_today))).all()
-expenses_past_30days = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_30days), str(day_today))).all()
+# past_week = day_today - datetime.timedelta(days=7)
+# past_30days = day_today - datetime.timedelta(days=30)
+# list_past_week = db.session.query(Services).filter(Services.service_date.between(str(past_week), str(day_today))).all()
+# list_past_30days = db.session.query(Services).filter(Services.service_date.between(str(past_30days), str(day_today))).all()
 
-
-sum_past_week = round(sum([i.Price for i in list_past_week]), 2)
-sum_past_30days = round(sum([i.Price for i in list_past_30days]), 2)
-
-expenses_sum_past_week = round(sum([i.amount for i in expenses_past_week]), 2)
-expenses_sum_past_30days = round(sum([i.amount for i in expenses_past_30days]), 2)
-
-money_today = db.session.query(Services).filter(Services.service_date.between(str(yesterday), str(day_today))).all() 
-cost_today = db.session.query(Expenses).filter(Expenses.tdate.between(str(yesterday), str(day_today))).all() 
-
-pay_today = round(sum([i.Price for i in money_today]), 2)
-expense_today = round(sum([i.amount for i in cost_today]), 2)
+# expenses_past_week = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_week), str(day_today))).all()
+# expenses_past_30days = db.session.query(Expenses).filter(Expenses.tdate.between(str(past_30days), str(day_today))).all()
 
 
-balance_past_week = sum_past_week - expenses_sum_past_week
-balance_past_30days = sum_past_30days - expenses_sum_past_30days
+# sum_past_week = round(sum([i.Price for i in list_past_week]), 2)
+# sum_past_30days = round(sum([i.Price for i in list_past_30days]), 2)
 
-report = f'Total made and spent last week: {sum_past_week}/ {expenses_sum_past_week}\nTotal made and spent last 30 days: {sum_past_30days}/ {expenses_sum_past_30days}\nBalance last week: {balance_past_week }\nBalance last 30 days: {balance_past_30days}'
-hoje = f'Total made and spent today: {pay_today}/ {expense_today}'
-print(hoje)
+# expenses_sum_past_week = round(sum([i.amount for i in expenses_past_week]), 2)
+# expenses_sum_past_30days = round(sum([i.amount for i in expenses_past_30days]), 2)
+
+# money_today = db.session.query(Services).filter(Services.service_date.between(str(yesterday), str(day_today))).all() 
+# cost_today = db.session.query(Expenses).filter(Expenses.tdate.between(str(yesterday), str(day_today))).all() 
+
+# pay_today = round(sum([i.Price for i in money_today]), 2)
+# expense_today = round(sum([i.amount for i in cost_today]), 2)
+
+
+# balance_past_week = sum_past_week - expenses_sum_past_week
+# balance_past_30days = sum_past_30days - expenses_sum_past_30days
+
+# report = f'Total made and spent last week: {sum_past_week}/ {expenses_sum_past_week}\nTotal made and spent last 30 days: {sum_past_30days}/ {expenses_sum_past_30days}\nBalance last week: {balance_past_week }\nBalance last 30 days: {balance_past_30days}'
+# hoje = f'Total made and spent today: {pay_today}/ {expense_today}'
+# print(hoje)
+
+
+
+
+
+date_time_str = '18-09-19'
+date_time_obj = datetime.datetime.strptime(date_time_str, '%d-%m-%y')
+
+print(date_time_obj, datetime.datetime.today())
+
+
+def fetch_events(date:datetime.date):
+    day_today = date
+    yesterday = day_today - datetime.timedelta(days=1)
+    events = []
+
+    todays_events = db.session.query(Services).filter(Services.service_date.between(str(yesterday), str(day_today))).all()
+
+    indx = 0
+    for event in todays_events:
+        
+        event_to_add = {
+        'todo': f'{todays_events[indx].Name} - {todays_events[indx].Address}- {todays_events[indx].Service}',
+        'date': todays_events[indx].service_date,
+        'time': todays_events[indx].service_time
+        }
+        events.append(event_to_add)
+        indx =+ 1
+    return events
+
+print(fetch_events(today)[0])
+
+
 
 

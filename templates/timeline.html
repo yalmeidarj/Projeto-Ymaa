@@ -1,22 +1,33 @@
 {% extends 'layout.html' %} {% block body %}   
+<!-- <div class="form-group" id="newdate">
+  <div class="container-fluid">
+    <div class="text-right"> -->
+<form class="container-fluid" method="POST">
+      <div class="form-group">
+        <label for="newdate">Nova Data</label>
+        <input  type="date" id="newdate" name="newdate">    
+      </div>
 
-<div class="container py-7">
+      <div class="form-group"> 
+          <button type="submit" class="btn btn-primary">Adicionar</button>       
+      </div>
+</form>
+<!-- <br> -->
+<div class="container py-7"> 
         <h2 class="text-uppercase text-letter-spacing-xs my-0 text-primary font-weight-bold">
-          Agenda para Hoje
+          Agenda para {{date_to_display}}
         </h2>
         <p class="text-sm text-dark mt-0 mb-5">clique no evento para expandir detalhes</p>
         <!-- Days -->
         <div class="row">
-          <div class="col-lg-4 mb-3" id="Friday, Nov 13th">
-            <h4 class="mt-0 mb-3 text-dark op-8 font-weight-bold">
-              {{today}}
-            </h4>
+          <div class="col-lg-4 mb-3" id="today">
+
 			{% for event in events %}
             <ul class="list-timeline list-timeline-primary">
 			
               <li class="list-timeline-item show p-0 pb-3 pb-lg-4 d-flex flex-wrap flex-column" data-toggle="collapse" data-target="#day-1-item-2">
-                <p class="my-0 text-dark flex-fw text-sm text-uppercase"><span class="text-primary font-weight-bold op-8 infinite animated flash" data-animate="flash" data-animate-infinite="1" data-animate-duration="3.5" style="animation-duration: 3.5s;">{{event.time}} - {{event.todo}}</span></p>
-                <p class="my-0 collapse flex-fw text-uppercase text-xs text-dark op-8 show" id="day-1-item-2"> Talk: Wireframing / <span class="text-primary">Room 19</span> </p>
+                <p class="my-0 text-dark flex-fw text-sm text-uppercase"><span class="text-primary font-weight-bold op-8 infinite animated flash" data-animate="flash" data-animate-infinite="1" data-animate-duration="3.5" style="animation-duration: 3.5s;">{{ event.time }} - {{ event.todo }}</span></p>
+                <p class="my-0 collapse flex-fw text-uppercase text-xs text-dark op-8 show" id="day-1-item-2"> {{ event.service }} <span class="text-primary"> - {{ event.notes }}</span> </p>
               </li>              
                 
             </ul>

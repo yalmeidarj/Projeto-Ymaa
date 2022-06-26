@@ -100,48 +100,26 @@ class Expenses(db.Model):
     def __repr__(self):
         return '<User %r>' % self.expense_id
 
-events = [
-    # {
-    #     'todo' : 'task',
-    #     'date' : '2022-05-17',
-    #     'time' : '20:26'
-    # },
-    # {
-    #     'todo' : 'task2',
-    #     'date' : '2022-05-17',
-    #     'time' : '15:26'
-    # },    
-    # {
-    #     'todo' : 'task3',
-    #     'date' : '2022-05-22',
-    # },
-    # {
-    #     'todo' : 'task4',
-    #     'date' : '2022-06-17',
-    # },
-    # {
-    #     'todo' : 'task6',
-    #     'date' : '2022-05-17',
-    # }
-]
 
 
-new_event = db.session.query(Services.service_date).all()
-print(new_event)
-for event in new_event:
-  #event = ''.join(str(event).split(','))
-  if event == (None,):
-    pass
-  else:
-    event = ''.join(str(event).split(','))
-    print(event)
+day_today = datetime.datetime.today()
+yesterday = day_today - datetime.timedelta(days=1)
+events = []
+
+todays_events = db.session.query(Services).filter(Services.service_date.between(str(yesterday), str(day_today))).all()
+
+indx = 0
+for event in todays_events:
+    
     event_to_add = {
-    #'todo': 'timeDate.Service',
-    'date': event[2:12],
-    'time': event[13:18]
+    'todo': f'{todays_events[indx].Name} - {todays_events[indx].Address}',
+    'date': todays_events[indx].service_date,
+    'time': todays_events[indx].service_time,
+    'service': todays_events[indx].Service,
+    'notes': todays_events[indx].Notes,
     }
     events.append(event_to_add)
-print(events)
+    indx =+ 1
 
 
 ############################
@@ -178,8 +156,7 @@ def registrar():
     error = None 
     userName = request.form.get("email") 
     userName = db.session.query(Users).filter_by(UserName=userName).first()
-    if userName:
-      print('usuario existente')
+    if userName:      
       flash('Email já registrado. Use outro Email ou entre em sua conta.')
       # Account already exists.
 
@@ -215,22 +192,43 @@ def calendar():
   #events=events
   return render_template('calendar.html', events=events)
 
-@app.route('/timeline')
+@app.route('/timeline', methods = ['GET','POST'])
 @login_required
-def timeline():
-  today = datetime.datetime.today().strftime
-  #today_ptBR = format_datetime(today, format='full')
-  #events = events 
-  #global events
-  # date format YYYY-MM-DD
-  #events=events
-  return render_template('timeline.html',events = events,  **locals())
+def timeline():  
+  def fetch_events(date:datetime.date = datetime.date.today() ):
+    chosen_date = date
+    previous_day = chosen_date - datetime.timedelta(days=1)
+    events = []
+    events_db = db.session.query(Services).filter(Services.service_date.between(str(previous_day), str(chosen_date))).all()
+    indx = 0
+    for event in events_db:
+        
+        event_to_add = {
+        'todo': f'{events_db[indx].Name} - {events_db[indx].Address}- {events_db[indx].Service}',
+        'date': events_db[indx].service_date,
+        'time': events_db[indx].service_time,
+        'service': events_db[indx].Service,
+        'notes': events_db[indx].Notes,
+        }
+        events.append(event_to_add)
+        indx += 1
+    return events
+  if request.method == 'POST':
+    chosen_day = datetime.datetime.strptime(request.form.get("newdate"), '%Y-%m-%d')
+    date_to_display = str(chosen_day)[:10] 
+    fetch_events(chosen_day)
+
+    return render_template('timeline.html', events = fetch_events(chosen_day),  **locals())
+  else:
+    chosen_day = datetime.datetime.today()
+    date_to_display = str(chosen_day)[:10]
+
+    return render_template('timeline.html', events = fetch_events(),  **locals())
 
 @app.route('/despesas', methods = ['GET','POST'])
 @login_required
 def despesas():
-  if request.method == 'POST':
-    print('working')
+  if request.method == 'POST':    
     amount= request.form.get("price")
     category = request.form.get("category__select")
     description = request.form.get("activity")
@@ -243,9 +241,7 @@ def despesas():
     return redirect(url_for('financeiro'))
   else:
     expense_value = [expense[0] for expense in db.session.query(Expenses.amount).all()]
-    print("Expense value:")
-    print(sum(expense_value))
-
+    
     return render_template('despesas.html', **locals())
 
 @app.route('/financeiro')
@@ -393,14 +389,14 @@ def al():
 def servicos(): 
 
   all_services = db.session.query(Services).all()
-
-  select = request.form.get('comp_select')
+  c = ''
+  #select = request.form.get('comp_select')
   if request.form.get("confirm_pay"):
     print('Book ID: ', request.form.get('confirm_pay'))
-  elif request.form.get("sid"):
-    c = request.form["sid"]
+  elif request.form.get('s_id'):
+    c = request.form.get("sid")
     print(c)
-
+    #c = ''
 
   # if request.method == 'POST':
   #   print("i'm working")
