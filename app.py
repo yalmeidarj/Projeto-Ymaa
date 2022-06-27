@@ -11,7 +11,10 @@ import sqlite3
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import datetime
 from babel.dates import format_datetime
-
+from sqlalchemy.engine import result
+import sqlalchemy
+from sqlalchemy import create_engine, MetaData,\
+Table, Column, Numeric, Integer, VARCHAR, update
 
 
 def page_not_found(e):
@@ -25,6 +28,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://hostman:4e12f875@143.198.5
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+engine = create_engine("postgresql://hostman:4e12f875@143.198.52.41:5433/database")
+ 
+# initialize the Metadata Object
+meta = MetaData(bind=engine)
+MetaData.reflect(meta)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -101,25 +110,27 @@ class Expenses(db.Model):
         return '<User %r>' % self.expense_id
 
 
+def fetch():
+  day_today = datetime.datetime.today()
+  yesterday = day_today - datetime.timedelta(days=1)
+  events = []
 
-day_today = datetime.datetime.today()
-yesterday = day_today - datetime.timedelta(days=1)
-events = []
+  todays_events = db.session.query(Services).all()
 
-todays_events = db.session.query(Services).all()
-
-indx = 0
-for event in todays_events:
-    
-    event_to_add = {
-    'todo': f'{todays_events[indx].Name} - {todays_events[indx].Address}',
-    'date': todays_events[indx].service_date,
-    'time': todays_events[indx].service_time,
-    'service': todays_events[indx].Service,
-    'notes': todays_events[indx].Notes,
-    }
-    events.append(event_to_add)
-    indx += 1
+  indx = 0
+  for event in todays_events:
+      
+      event_to_add = {
+      'todo': f'{todays_events[indx].Name} - {todays_events[indx].Address}',
+      'date': todays_events[indx].service_date,
+      'time': todays_events[indx].service_time,
+      'service': todays_events[indx].Service,
+      'notes': todays_events[indx].Notes,
+      }
+      events.append(event_to_add)
+      indx += 1
+  events = sorted(events, key=lambda event: event['time'])
+  return events
 
 
 ############################
@@ -190,7 +201,8 @@ def calendar():
   #global events
   # date format YYYY-MM-DD
   #events=events
-  return render_template('calendar.html', events=events)
+  #events = sorted(events, key=lambda event: event['time'])
+  return render_template('calendar.html', events=fetch())
 
 @app.route('/timeline', methods = ['GET','POST'])
 @login_required
@@ -212,18 +224,26 @@ def timeline():
         }
         events.append(event_to_add)
         indx += 1
+    events = sorted(events, key=lambda event: event['time'])
     return events
   if request.method == 'POST':
-    chosen_day = datetime.datetime.strptime(request.form.get("newdate"), '%Y-%m-%d')
-    date_to_display = str(chosen_day)[:10] 
-    fetch_events(chosen_day)
+    if request.form.get("newdate") != '':
+      chosen_day = datetime.datetime.strptime(request.form.get("newdate"), '%Y-%m-%d')
+      date_to_display = str(chosen_day)[:10] 
+      fetch_events(chosen_day)
 
-    return render_template('timeline.html', events = fetch_events(chosen_day),  **locals())
+      return render_template('timeline.html', events = fetch_events(chosen_day),  **locals())
+    else:
+      chosen_day = datetime.datetime.today()
+      date_to_display = str(chosen_day)[:10] 
+      fetch_events(chosen_day)
+
+      return render_template('timeline.html', events = fetch_events(chosen_day),  **locals())
   else:
     chosen_day = datetime.datetime.today()
     date_to_display = str(chosen_day)[:10]
 
-    return render_template('timeline.html', events = fetch_events(),  **locals())
+    return render_template('timeline.html', events = fetch_events(chosen_day),  **locals())
 
 @app.route('/despesas', methods = ['GET','POST'])
 @login_required
@@ -391,37 +411,22 @@ def servicos():
   all_services = db.session.query(Services).all()
   c = ''
   #select = request.form.get('comp_select')
-  if request.form.get("confirm_pay"):
-    print('Book ID: ', request.form.get('confirm_pay'))
+  if request.method == 'POST':
+    print("i'm working")
+  if request.form.get("confirm_pay") == "Não":
+    # my_service = meta.tables['services']
+    # u = update(my_service)
+    # u = u.values({"is_finished": "Sim"})
+    # u = u.where(my_service.c.Service_id == request.form.get("book_id"))
+    # engine.execute(u)
+    
+    # db.session.commit()
+    return redirect(url_for('servicos'))
+    #print('Book ID: ', request.form.get('confirm_pay'))
   elif request.form.get('s_id'):
     c = request.form.get("sid")
     print(c)
-    #c = ''
 
-  # if request.method == 'POST':
-  #   print("i'm working")
-  # if request.form.get('submit_button'):#['submit_button'] == 'Do Something':
-  #   print("i'm working")    
-  #   if x:
-  #     new_client = False      
-  #     print('working')
-  #     service = request.form["Service"]
-  #     price = float(request.form["price"])
-  #     name = request.form["name"]
-  #     lastName = request.form["lastName"]
-  #     address = request.form["address"]
-  #     db.session.add(Services(Service_id=None, Service=service, Price=price, Client_id=None, Name=name, LastName=lastName, Address=address, is_finished=0))
-  #     db.session.commit()
-  #     all_services = db.session.query(Services).all()
-
-  #     return redirect(url_for('servicos'))  
-  #   else:
-  #     new_client = True
-  #     service = request.form["Service"]
-  #     price = float(request.form["price"])
-      
-      
-  #     return redirect(url_for('servicos'))  
     
     
   return render_template('servicos.html', **locals())

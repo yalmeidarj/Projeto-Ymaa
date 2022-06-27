@@ -109,7 +109,8 @@ $(document).ready(function() {
                             <th>Cliente ID</th>
                             <th>Nome</th>
                             <th>Endereço</th>
-                            <th>PGTO Concluído?</th>                                              
+                            <th>PGTO Concluído?</th>
+                            <th>Comentários</th>                                              
                             
                         </tr>
                     </thead>
@@ -117,64 +118,31 @@ $(document).ready(function() {
                         {% for service in all_services %}
                         <tr>
                             <!-- <td>{{service.Service_id}}</td> -->
-                            <td>
+                            <!-- <td>
                                 
-                                <form action="{{ url_for('servicos') }}" method="POST">
-                                    <input id="s_id" name="s_id" type="hidden" value="{{ service.Notes }}">
-                                    <button type="button" class="asText default" name="sid" data-toggle="modal" data-target=".bd-example-modal-lg" value="{{ service.Notes }}" formmethod="post">{{service.Notes}}</button>                            
+                                   
+                                <button type="button" class="asText default" name="sid" value="{{ service.Service_id }}" formmethod="post">{{service.Service_id}}</button>                            
                                 
-                                </form>  
-                                <!-- </td>  -->
-
-                                <div class="modal bd-example-modal-lg"  role="dialog" aria-labelledby="maLargeModalLabel" >
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="container">
-                                                <form class="" action="/servicos" method="POST">
-                                                <div class="row">
-
-                                                        <div class="form-group">
-                                                            <label>{{ service.Notes }}</label>
-                                                        </div>
-                                                </div>            
-                    
-                                            </div>                
-                                        </div>
-                                    </div>
-                                </div>                            
-                            </td>
+                        
+                         
+                            </td> -->
+                            <td>{{service.Service_id}}</td>
                             <td>{{service.Service}}</td>
                             <td>{{service.Price}}</td>
                             <td>{{service.Client_id}}</td>
-                            <td>{{service.Name}} {{service.LastName}}</td>
+                            <td>
+                                 <button type="button" class="asText default" name="sid" value="{{ service.Service_id }}" formmethod="post">{{service.Name}} {{service.LastName}}</button>
+                            </td>
                             <td>{{service.Address}}</td>                        
                             <!-- <input id="confirm" name="confirm" type="hidden" value="{{service.is_finished}}"> -->
-                            <td>{{service.is_finished}}
-                            
+                            <td>{{service.is_finished}}                            
                                 <form action="{{ url_for('servicos') }}">
-                                    <input id="book_id" name="book_id" type="hidden" value="{{ service.is_finished }}">
+                                    <input id="book_id" name="book_id" type="hidden" value="{{ service.Service_id }}">
                                     <button type="submit" class="btn btn-primary btn-sm" name="confirm_pay" data-target=".bd-example-modal-lg" value="{{ service.is_finished }}"
                                                 formmethod="post">Editar</button>
                                 </form>
-                                <!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="container">
-                                                <form class="" action="/servicos" method="POST">
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label>{{ s_id }}</label>
-                                                        </div>
-                                                    </div>
-                                                </div>            
-                    
-                                            </div>                
-                                        </div>
-                                    </div>
-                                </div> -->
                             </td>
+                            <td>{{service.Notes}}</td>
                             <!-- <td><button type="submit" name="Do Something" class="btn btn-primary btn-sm" value="Do Something" formmethod="POST">Confirmar</button></td> -->
 
                         </tr>
@@ -184,60 +152,6 @@ $(document).ready(function() {
                     </tbody>
                 </table>
 
-        </div>
-    <!-- <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="maLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-        <div class="container">
-            <form class="" action="/clientes" method="POST">
-            <br>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-
-                                    <input type="text" class="form-control" name="name"  placeholder="Nome">
-                                </div>
-                            </div>
-                        </div>            
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="lastName" placeholder="Sobrenome">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="telefone" placeholder="Telefone">
-                                </div>
-                            </div>
-                        </div>                
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="email" placeholder="Email">
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="address" placeholder="Endereço">
-                                </div>
-                            </div>
-                        </div>
-                    </div>       
-                    </div> -->
-
-            <br>
-
-            <button type="submit" class="btn btn-primary">Adicionar</button>
-            <br>
-            <br>
-
-            </form>
-        </div>
         </div>
     </div>
     {% block scripts %}{% endblock %}
